@@ -1,0 +1,30 @@
+language: php
+php:
+  - 5.4
+  - 5.5
+env:
+  - MAGE=1.9.0.1
+  - MAGE=1.8.1.0
+  - MAGE=1.7.0.2
+  - MAGE=1.6.2.0
+before_script:
+  - MAGE_DIR=build
+  # Change composer Magento version
+  - cp .travis/composer.json composer.json
+  # Install mage-ci
+  - source <(curl -s https://raw.githubusercontent.com/EcomDev/MageCI/master/installer)
+  # Installing magento version with prepared DB dump
+  - bin/mage-ci install $MAGE_DIR $MAGE magento -c
+  # Installing dependencies
+  - composer install
+  # Installing EcomDev_PHPUnit module
+  - bin/mage-ci install-module $MAGE_DIR $(pwd)
+  # Configuring EcomDev_PHPUnit module
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a install
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a magento-config --db-name magento --same-db 1 --base-url http://test.magento.com/
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a change-status
+script:
+  - bin/phpunit -c tests/phpunit.xml --colors --coverage-clover=var/phpunit/coverage-unit.xml
+  - bin/mage-ci phpunit $MAGE_DIR --colors --coverage-clover=var/phpunit/coverage-integration.xml
+after_script:
+  - bin/coveralls -v

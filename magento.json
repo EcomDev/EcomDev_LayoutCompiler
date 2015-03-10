@@ -1,0 +1,70 @@
+{
+    "magento": {
+        "application": {
+            "name": "layoutcompiler",
+            "main_domain": "layoutcompiler.dev",
+            "composer": true,
+		    "uid": ":auto",
+            "directory": "<%=current_path%>/build",
+            "status_ips": ["192.168.6.1"],
+            "composer": true, 
+            "composer_path": "../",
+            "database_options": {
+              "create_test": true
+            },
+            "domain_map": {},
+            "php_extensions": {
+              "xdebug": {
+                "preferred_state": "beta",
+                "zend_extensions": ["xdebug.so"],
+                "directives": {
+                  "remote_enable": "1",
+                  "remote_port": "9000",
+                  "remote_host": "192.168.6.1",
+                  "max_nesting_level": "500"
+                }
+              },
+              "ssh2": {
+                "preferred_state": "beta"
+              }
+            }
+        }
+    },
+    "php": {
+        "major_version": "5.4",
+        "directives": {
+            "error_reporting": "E_ALL",
+            "error_log": "<%=current_path%>/var/log/php-errors.log",
+            "log_errors": "1",
+            "display_startup_errors": "1",
+            "display_errors": "1",
+            "opcache.memory_consumption": "256",
+            "opcache.interned_strings_buffer": "8",
+            "opcache.max_accelerated_files": "8000",
+            "opcache.revalidate_freq": "60",
+            "opcache.fast_shutdown": "1",
+            "opcache.enable_cli": "1"
+        }
+    },
+    "recipes": [
+        "mysql::server",
+        "git::default",
+        "magento::application",
+        "magento::redis",
+        "magento::dev",
+        "selinux::disabled"
+    ],
+    "vm": {
+        "box": "chef/centos-6.6",
+        "cpu": 4,
+        "memory": 1024,
+        "ip": "192.168.6.40",
+        "mount_dirs": {
+            "<%=current_path%>": "<%=current_path%>"
+        },
+        "mount_dir_options": {
+            "type": "nfs",
+            "mount_options": ["rw", "tcp", "async", "nolock"]
+        }
+    }
+}

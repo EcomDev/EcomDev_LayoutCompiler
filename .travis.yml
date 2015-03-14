@@ -23,8 +23,9 @@ before_script:
   - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a install
   - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a magento-config --db-name magento --same-db 1 --base-url http://test.magento.com/
   - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a change-status
+  - mkdir -p build/var/phpunit/cov
 script:
-  - bin/phpunit -c tests/phpunit.xml --colors --coverage-clover=var/phpunit/coverage-unit.xml
-  - bin/mage-ci phpunit $MAGE_DIR --colors --coverage-clover=var/phpunit/coverage-integration.xml
+  - bin/phpunit -c phpunit.xml --colors --coverage-php=build/var/phpunit/cov/unit.cov
 after_script:
+  - bin/phpcov merge build/var/phpunit/cov --clover build/var/phpunit/coverage.xml 
   - bin/coveralls -v

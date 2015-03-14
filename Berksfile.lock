@@ -19,7 +19,6 @@ DEPENDENCIES
     revision: 8df198da17f66ab53d9dc4fa5c4a4d378869eeb4
     branch: master
   selinux
-  sphinx (= 1.1.0)
   vhost
     git: git://github.com/EcomDev/chef-vhost.git
     revision: 72c66c9176bebb79d5621dce50dae7a1478a50a4
@@ -91,10 +90,6 @@ GRAPH
   ohai (2.0.1)
   openssl (4.0.0)
     chef-sugar (>= 0.0.0)
-  percona (0.15.5)
-    apt (>= 1.9)
-    openssl (>= 0.0.0)
-    yum (~> 3.0)
   php (1.5.0)
     build-essential (>= 0.0.0)
     iis (>= 0.0.0)
@@ -118,14 +113,6 @@ GRAPH
     yum (~> 3.0)
     yum-epel (>= 0.0.0)
   selinux (0.9.0)
-  sphinx (1.1.0)
-    apt (>= 0.0.0)
-    build-essential (>= 1.1.2)
-    mysql (>= 0.0.0)
-    percona (>= 0.0.0)
-    postgresql (>= 1.0.0)
-    yum (>= 0.0.0)
-    yum-epel (>= 0.0.0)
   ulimit (0.3.3)
   varnish (2.0.0)
     apt (~> 2.4)

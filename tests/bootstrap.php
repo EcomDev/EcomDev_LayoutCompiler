@@ -9,10 +9,8 @@ include $baseDirectory . '/vendor/autoload.php';
 set_include_path(
     implode(PATH_SEPARATOR, 
         array(
-            'build/lib',
-            'build/app/code/local',
-            'build/app/code/community',
-            'build/app/code/core',
+            $baseDirectory . '/src/lib',
+            $baseDirectory . '/tests/lib',
             get_include_path()
         )
     )
@@ -23,8 +21,10 @@ spl_autoload_register(function ($className) {
         '_' => DIRECTORY_SEPARATOR,
         '\\' => DIRECTORY_SEPARATOR
     )) . '.php';
-    
-    if (!stream_resolve_include_path($filePath)) {
+
+    $filePath = stream_resolve_include_path($filePath);
+
+    if (!$filePath) {
         return;
     }
 

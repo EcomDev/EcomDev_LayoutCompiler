@@ -15,14 +15,21 @@ class EcomDev_LayoutCompiler_Index
      * 
      * @var MetadataInterface[]
      */
-    protected $metadata = array();
+    private $metadata = array();
 
     /**
      * Metadata list by handle name
      * 
      * @var MetadataInterface[][]
      */
-    protected $metadataByHandle = array();
+    private $metadataByHandle = array();
+
+    /**
+     * Array of ascii chars conversion to hex
+     * 
+     * @var string[]
+     */
+    private $hexTable;
     
     /**
      * Loads an index by metadata parameters
@@ -34,7 +41,49 @@ class EcomDev_LayoutCompiler_Index
      */
     public function load(array $parameters)
     {
+        $result = @include $this->getIndexFileName($parameters);
         
+        if ($result) {
+            return true;
+        } 
+        
+        return false;
+    }
+    
+    private function getIndexFileName(array $parameters)
+    {
+        return $this->getSavePath() . '/' . $this->getIndexIdentifier($parameters) . '.php';
+    }
+    
+    public function getIndexIdentifier(array $parameters)
+    {
+        $identifier = 'index_'; 
+        
+        ksort($parameters);
+        
+        foreach ($parameters as $key => $value) {
+            $identifier .= sprintf('%s_%s', $this->escapeHex($key), $this->escapeHex($value)) . '_';
+        }
+        
+        return rtrim($identifier, '_');
+    }
+
+    /**
+     * Escapes all non ascii letters and numbers to their hexadecimal presentation  
+     * 
+     * @param $string
+     * @return string
+     */
+    private function escapeHex($string)
+    {
+        if ($this->hexTable === null) {
+            $chars = array_merge(range(0, 47), range(58, 64), range(91, 94), array(96), range(123, 255));
+            foreach ($chars as $char) {
+                $this->hexTable[chr($char)] = 'x' . strtoupper(bin2hex(chr($char)));
+            }
+        }
+        
+        return strtr($string, $this->hexTable);
     }
 
     /**
@@ -126,6 +175,16 @@ class EcomDev_LayoutCompiler_Index
      */
     public function save(array $parameters)
     {
-        // TODO: Implement save() method.
+        $lines = array();
+        foreach ($this->metadata as $metadata) {
+            $lines[] = sprintf('$this->addMetadata(%s);', var_export($metadata, true));
+        }
+        
+        if (!is_dir($this->getSavePath())) {
+            mkdir($this->getSavePath(), 755);
+        }
+        
+        file_put_contents($this->getIndexFileName($parameters), "<?php \n" . implode("\n", $lines));
+        return $this;
     }
 }

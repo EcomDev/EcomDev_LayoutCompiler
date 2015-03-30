@@ -8,7 +8,8 @@ use EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface as MetadataInterf
  * 
  */
 interface EcomDev_LayoutCompiler_Contract_IndexInterface
-    extends EcomDev_LayoutCompiler_Contract_PathAwareInterface
+    extends EcomDev_LayoutCompiler_Contract_PathAwareInterface,
+            EcomDev_LayoutCompiler_Contract_LayoutAwareInterface
 {
     /**
      * Loads an index by metadata parameters

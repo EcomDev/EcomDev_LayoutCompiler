@@ -9,6 +9,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     private $metadataFactoryInterface = 'EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface';
     private $parserInterface = 'EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface';
     private $sourceInterface = 'EcomDev_LayoutCompiler_Contract_Layout_SourceInterface';
+    private $errorProcessorInterface = 'EcomDev_LayoutCompiler_Contract_ErrorProcessorInterface';
     
     /**
      * Creates a new xml element
@@ -72,18 +73,23 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
      * Return parser instance
      *
      * @param array $handles
-     * @param bool $count
+     * @param bool|int $countHandles
+     * @param bool $countHandlePath
      * @return PHPUnit_Framework_MockObject_MockObject|EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface
      */
-    private function createMetadata($handles = array(), $count = false)
+    private function createMetadata($handles = array(), $countHandles = false, $countHandlePath = true)
     {
         $parser = $this->getMockForAbstractClass($this->metadataInterface);
 
-        $parser->expects($count ? $this->once() : $this->any())
+        $getHandlesMatcher = $countHandles ? 
+            (is_int($countHandles) ?  $this->exactly($countHandles) :  $this->once() ) : 
+            $this->any();
+        
+        $parser->expects($getHandlesMatcher)
             ->method('getHandles')
             ->willReturn(array_keys($handles));
 
-        if ($count) {
+        if ($countHandles && $countHandlePath) {
             $handlesMatcher = count($handles) ? $this->exactly(count($handles)) : $this->never();
         } else {
             $handlesMatcher = $this->any();
@@ -125,5 +131,23 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
         }
 
         return $source;
+    }
+
+    /**
+     * Creates an instance of error processor
+     * 
+     * @param EcomDev_LayoutCompiler_Contract_ErrorProcessorAwareInterface|null $forObject
+     * @return EcomDev_LayoutCompiler_Contract_ErrorProcessorInterface
+     */
+    private function createErrorProcessor($forObject = null)
+    {
+        $errorProcessor = $this->getMockForAbstractClass($this->errorProcessorInterface);
+        
+        if ($forObject !== null 
+            && $forObject instanceof EcomDev_LayoutCompiler_Contract_ErrorProcessorAwareInterface) {
+            $forObject->addErrorProcessor($errorProcessor);
+        }
+        
+        return $errorProcessor;
     }
 }

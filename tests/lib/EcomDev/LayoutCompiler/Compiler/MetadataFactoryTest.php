@@ -20,12 +20,6 @@ class EcomDev_LayoutCompiler_Compiler_MetadataFactoryTest
     {
         $this->factory = new MetadataFactory();
     }
-
-    public function testItIsPossibleToStoreSavePath()
-    {
-        $this->assertSame($this->factory, $this->factory->setSavePath('path/to/save'));
-        $this->assertSame('path/to/save', $this->factory->getSavePath());
-    }
     
     public function testItReturnsAnNewInstanceOfMetadataForASource()
     {

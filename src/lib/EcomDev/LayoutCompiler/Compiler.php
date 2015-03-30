@@ -8,26 +8,23 @@ use EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface as ParserInterface;
 class EcomDev_LayoutCompiler_Compiler
     implements EcomDev_LayoutCompiler_Contract_CompilerInterface
 {
+    use EcomDev_LayoutCompiler_PathAwareTrait {
+        setSavePath as private traitSetSavePath;
+    }
+    
     /**
      * Metadata class
      * 
      * @var MetadataFactoryInterface
      */
-    protected $_metadataFactory;
-
-    /**
-     * Save path of the compiler
-     * 
-     * @var string
-     */
-    protected $_savePath;
+    protected $metadataFactory;
 
     /**
      * List of parsers for a particular node name
      * 
      * @var ParserInterface[]
      */
-    protected $_parsers;
+    protected $parsers;
     
     /**
      * Constructs a new compiler instance
@@ -50,7 +47,7 @@ class EcomDev_LayoutCompiler_Compiler
             );
         }
         
-        $this->_metadataFactory = $options['metadata_factory'];
+        $this->metadataFactory = $options['metadata_factory'];
         
         if (isset($options['save_path'])) {
             $this->setSavePath($options['save_path']);
@@ -70,7 +67,7 @@ class EcomDev_LayoutCompiler_Compiler
      */
     public function getMetadataFactory()
     {
-        return $this->_metadataFactory;
+        return $this->metadataFactory;
     }
     
     /**
@@ -82,7 +79,7 @@ class EcomDev_LayoutCompiler_Compiler
      */
     public function setParser($nodeName, ParserInterface $parser)
     {
-        $this->_parsers[$nodeName] = $parser;
+        $this->parsers[$nodeName] = $parser;
         return $this;
     }
 
@@ -94,7 +91,7 @@ class EcomDev_LayoutCompiler_Compiler
      */
     public function removeParser($nodeName)
     {
-        unset($this->_parsers[$nodeName]);
+        unset($this->parsers[$nodeName]);
         return $this;
     }
 
@@ -105,7 +102,7 @@ class EcomDev_LayoutCompiler_Compiler
      */
     public function getParsers()
     {
-        return $this->_parsers;
+        return $this->parsers;
     }
 
     /**
@@ -137,7 +134,7 @@ class EcomDev_LayoutCompiler_Compiler
             }
         }
         
-        $metadata = $this->_metadataFactory->createFromSource($source, array_keys($result));
+        $metadata = $this->metadataFactory->createFromSource($source, array_keys($result));
         
         foreach ($metadata->getHandles() as $handle) {
             if (isset($result[$handle])) {
@@ -166,10 +163,10 @@ class EcomDev_LayoutCompiler_Compiler
     {
         $result = array();
         foreach ($element->children() as $childName => $childNode) {
-            if (!isset($this->_parsers[$childName])) {
+            if (!isset($this->parsers[$childName])) {
                 continue;
             }
-            $response = $this->_parsers[$childName]
+            $response = $this->parsers[$childName]
                 ->parse($childNode, $this, $parentIdentifier);
             
             if (!$response) {
@@ -195,18 +192,8 @@ class EcomDev_LayoutCompiler_Compiler
      */
     public function setSavePath($savePath)
     {
-        $this->_savePath = $savePath;
-        $this->_metadataFactory->setSavePath($savePath);
+        $this->traitSetSavePath($savePath);
+        $this->metadataFactory->setSavePath($this->getSavePath());
         return $this;
-    }
-
-    /**
-     * Returns a current save path for a compiler
-     *
-     * @return string
-     */
-    public function getSavePath()
-    {
-        return $this->_savePath;
     }
 }

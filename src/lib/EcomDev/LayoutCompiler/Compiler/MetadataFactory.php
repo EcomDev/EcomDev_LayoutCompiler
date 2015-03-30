@@ -11,13 +11,7 @@ use EcomDev_LayoutCompiler_Compiler_Metadata as Metadata;
 class EcomDev_LayoutCompiler_Compiler_MetadataFactory
     implements EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface
 {
-
-    /**
-     * Save path
-     * 
-     * @var string
-     */
-    private $savePath;
+    use EcomDev_LayoutCompiler_PathAwareTrait;
     
     /**
      * Returns an instance of new metadata object from source object
@@ -29,27 +23,5 @@ class EcomDev_LayoutCompiler_Compiler_MetadataFactory
     public function createFromSource(SourceInterface $source, array $handles = array())
     {
         return new Metadata($handles, $source->getId(), $source->getChecksum(), $this->getSavePath());
-    }
-
-    /**
-     * Sets a save path for a compiled layout files
-     *
-     * @param string $savePath
-     * @return $this
-     */
-    public function setSavePath($savePath)
-    {
-        $this->savePath = $savePath;
-        return $this;
-    }
-
-    /**
-     * Returns a current save path for a compiler
-     *
-     * @return string
-     */
-    public function getSavePath()
-    {
-        return $this->savePath;
     }
 }

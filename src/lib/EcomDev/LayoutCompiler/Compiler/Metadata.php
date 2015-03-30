@@ -10,6 +10,8 @@ use EcomDev_LayoutCompiler_Contract_Layout_SourceInterface as SourceInterface;
 class EcomDev_LayoutCompiler_Compiler_Metadata
     implements EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface
 {
+    use EcomDev_LayoutCompiler_PathAwareTrait;
+    
     /**
      * Identifier
      * 
@@ -30,13 +32,6 @@ class EcomDev_LayoutCompiler_Compiler_Metadata
      * @var string[]
      */
     private $handles;
-
-    /**
-     * A path where files should be stored
-     * 
-     * @var string
-     */
-    private $savePath;
 
     /**
      * Creates a new instance of metadata
@@ -116,27 +111,5 @@ class EcomDev_LayoutCompiler_Compiler_Metadata
     public static function __set_state(array $data)
     {
         return new self($data['handles'], $data['id'], $data['checksum'], $data['savePath']);
-    }
-
-    /**
-     * Sets a save path for a compiled layout files
-     *
-     * @param string $savePath
-     * @return $this
-     */
-    public function setSavePath($savePath)
-    {
-        $this->savePath = $savePath;
-        return $this;
-    }
-
-    /**
-     * Returns a current save path for a compiler
-     *
-     * @return string
-     */
-    public function getSavePath()
-    {
-        return $this->savePath;
     }
 }

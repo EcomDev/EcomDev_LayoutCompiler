@@ -63,13 +63,6 @@ class EcomDev_LayoutCompiler_CompilerTest
         $compiler = new Compiler($this->getCompilerOptions());
         $this->assertSame($this->metadataFactory, $compiler->getMetadataFactory());
     }
-
-    public function testItIsPossibleToStoreSavePath()
-    {
-        $compiler = new Compiler($this->getCompilerOptions());
-        $this->assertSame($compiler, $compiler->setSavePath('path/to/save'));
-        $this->assertSame('path/to/save', $compiler->getSavePath());
-    }
     
     public function testItIsPossibleToSetSavePathFromOptions()
     {

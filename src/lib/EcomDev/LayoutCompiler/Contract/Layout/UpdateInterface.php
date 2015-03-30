@@ -7,6 +7,18 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
     extends EcomDev_LayoutCompiler_Contract_LayoutAwareInterface
 {
     /**
+     * Normal index type
+     */
+    const INDEX_NORMAL = 'normal';
+    
+    /**
+     * Runtime index type
+     * 
+     * @var string
+     */
+    const INDEX_RUNTIME = 'runtime';
+    
+    /**
      * Adds a handle to the list of available
      * 
      * @param string|string[] $handle
@@ -37,30 +49,26 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
     public function load($handles = array());
 
     /**
-     * Returns list of main sources that are stale for current theme, package, etc.
+     * Returns a list of sources by type
      * 
+     * @param string $type
      * @return SourceInterface[]
      */
-    public function getIndexSources();
+    public function getSources($type = self::INDEX_NORMAL);
 
     /**
-     * Returns a list of runtime sources
-     * 
-     * @return SourceInterface[]
-     */
-    public function getRuntimeSources();
-
-    /**
-     * Loads an index or creates a new one based on internal data parameters
+     * Loads index for a normal type of data
      *
-     * @return $this
+     * @param string $type type of the index
+     * @return EcomDev_LayoutCompiler_Contract_IndexInterface
      */
-    public function loadIndex();
+    public function loadIndex($type = self::INDEX_NORMAL);
 
     /**
-     * Returns an instance of index
-     * 
-     * @return IndexInterface
+     * Returns an instance of index with a specified type
+     *
+     * @param string $type type of the index
+     * @return EcomDev_LayoutCompiler_Contract_IndexInterface
      */
-    public function getIndex();
+    public function getIndex($type = self::INDEX_NORMAL);
 }

@@ -2,6 +2,10 @@
 
 use EcomDev_LayoutCompiler_Contract_Layout_ItemInterface as ItemInterface;
 
+/**
+ * Layout loader interface
+ * 
+ */
 interface EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface
     extends EcomDev_LayoutCompiler_Contract_LayoutAwareInterface
 {

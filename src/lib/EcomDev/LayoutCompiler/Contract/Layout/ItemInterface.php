@@ -20,7 +20,8 @@ interface EcomDev_LayoutCompiler_Contract_Layout_ItemInterface
     const TYPE_POST_INITIALIZE = 1;
     
     /**
-     * Type when the instruction is rendered at load time
+     * Type when the instruction is rendered at layout load time (default)
+     * 
      */
     const TYPE_LOAD = 2;
 

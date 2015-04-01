@@ -3,24 +3,28 @@
 use EcomDev_LayoutCompiler_Contract_LayoutInterface as LayoutInterface;
 use EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface as ProcessorInterface;
 
-class EcomDev_LayoutCompiler_Layout_Item_Include 
+/**
+ * Removes layout instructions that are related to particular block
+ * 
+ */
+class EcomDev_LayoutCompiler_Layout_Item_Remove
     implements EcomDev_LayoutCompiler_Contract_Layout_ItemInterface
 {
     /**
-     * A handle that should be included
-     *
+     * Identifier of the block which mentions should be removed
+     * 
      * @var string
      */
-    private $handle;
-
+    private $blockId;
+    
     /**
-     * Constructor of the include item for layout
+     * Initializes block id which mentions should be removed from the layout structure
      * 
-     * @param string $handle
+     * @param string $blockId
      */
-    public function __construct($handle)
+    public function __construct($blockId)
     {
-        $this->handle = $handle;
+        $this->blockId = $blockId;
     }
     
     /**
@@ -32,10 +36,10 @@ class EcomDev_LayoutCompiler_Layout_Item_Include
      */
     public function execute(LayoutInterface $layout, ProcessorInterface $processor)
     {
-        $loader = $layout->getLoader();
+        $items = $processor->findItemsByBlockIdAndType($this->blockId, self::TYPE_LOAD);
         
-        if (!$loader->isLoaded($this->handle)) {
-            $loader->loadIntoProcessor($this->handle, $processor);
+        foreach ($items as $item) {
+            $processor->removeItem($item);
         }
         
         return $this;
@@ -49,7 +53,6 @@ class EcomDev_LayoutCompiler_Layout_Item_Include
      */
     public function getType()
     {
-        return self::TYPE_INITIALIZE;
+        return self::TYPE_POST_INITIALIZE;
     }
-    
 }

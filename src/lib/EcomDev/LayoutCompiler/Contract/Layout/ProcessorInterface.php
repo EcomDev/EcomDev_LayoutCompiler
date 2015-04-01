@@ -42,13 +42,13 @@ interface EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface
     public function findItemsByType($type);
     
     /**
-     * Returns item list by block identifier
+     * Returns item list by block identifier and type of load
      *
      * @param string $identifier
-     * @param string $classOrInterface
+     * @param int $type
      * @return ItemInterface[]
      */
-    public function findItemsByBlockIdAndType($identifier, $classOrInterface);
+    public function findItemsByBlockIdAndType($identifier, $type);
         
     /**
      * Execute an type of action depending on a layout instance

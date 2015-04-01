@@ -1,9 +1,5 @@
 <?php
 
-
-use EcomDev_LayoutCompiler_Contract_LayoutInterface as LayoutInterface;
-use EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface as ProcessorInterface;
-
 /**
  * Abstract block aware item (regular layout operation)
  */
@@ -11,42 +7,72 @@ abstract class EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem
     implements EcomDev_LayoutCompiler_Contract_Layout_ItemInterface, 
                EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface
 {
-    public function __construct()
+    /**
+     * Block identifier
+     * 
+     * @var string
+     */
+    private $blockId;
+
+    /**
+     * Parent block identifiers
+     * 
+     * @var string[]
+     */
+    private $parentBlockIds;
+
+    /**
+     * @param string $blockId
+     * @param string[] $parentBlockIds
+     */
+    public function __construct($blockId, array $parentBlockIds = array())
     {
-        
+        $this->blockId = $blockId;
+        $this->parentBlockIds = $parentBlockIds;
     }
 
     /**
-     * Can be a string or an array of strings
+     * Identifier of the related block
      *
-     * @return string|string[]
+     * @return string
      */
-    public function getBlockName()
+    public function getBlockId()
     {
-        // TODO: Implement getBlockName() method.
+        return $this->blockId;
     }
 
     /**
-     * Executes an action on layout object
+     * Returns list of possible block identifiers, that might be affected.
      *
-     * @param LayoutInterface $layout
-     * @param ProcessorInterface $processor
-     * @return $this
+     * Includes block identifier itself.
+     *
+     * @return string[]
      */
-    public function execute(LayoutInterface $layout, ProcessorInterface $processor)
+    public function getPossibleBlockIdentifiers()
     {
-        // TODO: Implement execute() method.
+        $parentBlockIds = $this->getParentBlockIds();
+        array_unshift($parentBlockIds, $this->getBlockId());
+        return $parentBlockIds;
     }
 
+    /**
+     * Returns list of parent block ids for this block
+     * 
+     * @return string[]
+     */
+    public function getParentBlockIds()
+    {
+        return $this->parentBlockIds;
+    }
+    
     /**
      * Type of operation, @see const TYPE_* for details
-     *
      *
      * @return int
      */
     public function getType()
     {
-        // TODO: Implement getType() method.
+        return self::TYPE_LOAD;
     }
-
+    
 }

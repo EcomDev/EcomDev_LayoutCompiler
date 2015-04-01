@@ -13,10 +13,12 @@ interface EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface
      * 
      * @param SimpleXMLElement $element
      * @param CompilerInterface $compiler
-     * @param null|string $parentIdentifier
+     * @param null|string $blockIdentifier
+     * @param string[] $parentIdentifiers
      * @return string|string[]
      */
     public function parse(SimpleXMLElement $element, 
                           CompilerInterface $compiler,
-                          $parentIdentifier = null);
+                          $blockIdentifier = null, 
+                          $parentIdentifiers = array());
 }

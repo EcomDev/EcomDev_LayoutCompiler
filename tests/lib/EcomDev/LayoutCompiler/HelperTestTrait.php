@@ -10,6 +10,8 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     private $parserInterface = 'EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface';
     private $sourceInterface = 'EcomDev_LayoutCompiler_Contract_Layout_SourceInterface';
     private $layoutInterface = 'EcomDev_LayoutCompiler_Contract_LayoutInterface';
+    private $layoutItemInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ItemInterface';
+    private $layoutItemBlockAware = 'EcomDev_LayoutCompiler_Layout_AbstractBlockItem';
     private $compilerInterface = 'EcomDev_LayoutCompiler_Contract_CompilerInterface';
     private $processorInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface';
     private $loaderInterface = 'EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface';
@@ -216,6 +218,27 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     {
         return $this->getMockForAbstractClass($this->compilerInterface);
     }
+
+    /**
+     * Returns a mock of compiler interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_Layout_ItemInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createLayoutItem()
+    {
+        return $this->getMockForAbstractClass($this->layoutItemInterface);
+    }
+
+    /**
+     * Returns a mock of compiler interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_Layout_ItemInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createBlockAwareLayoutItem()
+    {
+        return $this->getMockForAbstractClass($this->layoutItemInterface);
+    }
+
 
     /**
      * Creates a layout mock based on interface

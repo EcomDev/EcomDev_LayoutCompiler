@@ -6,4 +6,4 @@ Transforms recursive layout xml files into simple simple one level php code, tha
 Currently in development phase.
 
 # Status
-Development Branch: [![Build Status](https://travis-ci.org/EcomDev/EcomDev_LayoutCompiler.svg?branch=develop)](https://travis-ci.org/EcomDev/EcomDev_LayoutCompiler?branch=develop)
+[![Dev Build Status](https://travis-ci.org/EcomDev/EcomDev_LayoutCompiler.svg?branch=develop)](https://travis-ci.org/EcomDev/EcomDev_LayoutCompiler?branch=develop) [![Develop Coverage Status](https://coveralls.io/repos/EcomDev/EcomDev_LayoutCompiler/badge.svg?branch=develop)](https://coveralls.io/r/EcomDev/EcomDev_LayoutCompiler?branch=develop)

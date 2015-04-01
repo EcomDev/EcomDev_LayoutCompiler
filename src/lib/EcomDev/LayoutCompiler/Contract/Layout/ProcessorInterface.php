@@ -34,7 +34,7 @@ interface EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface
     public function findItemsByBlockId($identifier);
 
     /**
-     * Returns item list by block identifier
+     * Returns item list by type of operation
      *
      * @param int $type
      * @return ItemInterface[]

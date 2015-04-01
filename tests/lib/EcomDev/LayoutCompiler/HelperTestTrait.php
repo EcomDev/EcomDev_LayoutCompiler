@@ -9,6 +9,12 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     private $metadataFactoryInterface = 'EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface';
     private $parserInterface = 'EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface';
     private $sourceInterface = 'EcomDev_LayoutCompiler_Contract_Layout_SourceInterface';
+    private $layoutInterface = 'EcomDev_LayoutCompiler_Contract_LayoutInterface';
+    private $compilerInterface = 'EcomDev_LayoutCompiler_Contract_CompilerInterface';
+    private $processorInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface';
+    private $loaderInterface = 'EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface';
+    private $updateInterface = 'EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface';
+    private $indexInterface = 'EcomDev_LayoutCompiler_Contract_Layout_IndexInterface';
     private $errorProcessorInterface = 'EcomDev_LayoutCompiler_Contract_ErrorProcessorInterface';
     
     /**
@@ -149,5 +155,107 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
         }
         
         return $errorProcessor;
+    }
+
+    /**
+     * Annotation by name
+     * 
+     * @param string $name
+     * @return string|string[]|null
+     */
+    private function getAnnotationByName($name, $single = true)
+    {
+        if ($this instanceof PHPUnit_Framework_TestCase) {
+            $annotations = $this->getAnnotations();
+            if (isset($annotations['method'][$name])) {
+                return $single ? 
+                    $annotations['method'][$name][0] :
+                    $annotations['method'][$name];
+            }
+        }
+        
+        return $single ? null : array();
+    }
+
+    /**
+     * Returns a mock of update interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createUpdate()
+    {
+        return $this->getMockForAbstractClass($this->updateInterface);
+    }
+
+    /**
+     * Returns a mock of processor interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createProcessor()
+    {
+        return $this->getMockForAbstractClass($this->processorInterface);
+    }
+
+    /**
+     * Returns a mock of loader interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createLoader()
+    {
+        return $this->getMockForAbstractClass($this->loaderInterface);
+    }
+
+    /**
+     * Returns a mock of compiler interface
+     * 
+     * @return EcomDev_LayoutCompiler_Contract_CompilerInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createCompiler()
+    {
+        return $this->getMockForAbstractClass($this->compilerInterface);
+    }
+
+    /**
+     * Creates a layout mock based on interface
+     * 
+     * If you 
+     * 
+     * @return EcomDev_LayoutCompiler_Contract_LayoutInterface
+     */
+    private function createLayout()
+    {
+        $layout = $this->getMockForAbstractClass($this->layoutInterface);
+        
+        $this->stubObjectMethods(
+            func_get_args(),
+            $layout,
+            array(
+                $this->compilerInterface => 'getCompiler',
+                $this->processorInterface => 'getProcessor',
+                $this->loaderInterface => 'getLoader',
+                $this->updateInterface => 'getUpdate',
+                $this->indexInterface => 'getIndex'
+            )
+        );
+        
+        return $layout;
+    }
+    
+    private function stubObjectMethods($values, PHPUnit_Framework_MockObject_MockObject $object, $map)
+    {
+        foreach ($values as $value) {
+            foreach ($map as $interface => $method) {
+                if ($value instanceof $interface) {
+                    $object->expects($this->any())
+                        ->method($method)
+                        ->willReturn($value);
+                    unset($map[$interface]); // Remove interface from map, so no next value is matched
+                }
+            }
+        }
+        
+        return $this;
     }
 }

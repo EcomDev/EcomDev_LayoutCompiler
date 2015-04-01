@@ -34,8 +34,8 @@ class EcomDev_LayoutCompiler_IndexTest
     protected function setUp()
     {
         $this->index = new EcomDev_LayoutCompiler_Index();
-        $this->compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
-        $this->layout = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_LayoutInterface');
+        $this->compiler = $this->createCompiler();
+        $this->layout = $this->createLayout($this->compiler);
         $this->virtualDirectory = Stream::setup();
     }
     
@@ -367,10 +367,6 @@ class EcomDev_LayoutCompiler_IndexTest
                 $this->throwException($testException)
             );
         ;
-
-        $this->layout->expects($this->once())
-            ->method('getCompiler')
-            ->willReturn($this->compiler);
         
         $errorProcessor = $this->createErrorProcessor($this->index);
         $errorProcessor->expects($this->once())

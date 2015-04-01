@@ -156,18 +156,20 @@ class EcomDev_LayoutCompiler_Compiler
      * Parses an xml element with one of defined parsers, returns a string
      *
      * @param SimpleXMLElement $element
-     * @param string|null $parentIdentifier
+     * @param string|null $blockIdentifier
+     * @param string[] $parentIdentifiers
      * @return string[]
      */
-    public function parseElements(SimpleXMLElement $element, $parentIdentifier = null)
+    public function parseElements(SimpleXMLElement $element, $blockIdentifier = null, array $parentIdentifiers = array())
     {
         $result = array();
         foreach ($element->children() as $childName => $childNode) {
             if (!isset($this->parsers[$childName])) {
                 continue;
             }
+            
             $response = $this->parsers[$childName]
-                ->parse($childNode, $this, $parentIdentifier);
+                ->parse($childNode, $this, $blockIdentifier, $parentIdentifiers);
             
             if (!$response) {
                 continue;

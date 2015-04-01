@@ -227,17 +227,31 @@ class EcomDev_LayoutCompiler_CompilerTest
     {
         $parsers = array(
             'node1' => $this->createParser($this->returnCallback(
-                function(SimpleXMLElement $element, Compiler $compiler,  $parentIdentifier) {
+                function(SimpleXMLElement $element, Compiler $compiler, $parentIdentifier) {
                     return 'Node1' . ($parentIdentifier !== null ? sprintf('(%s)', $parentIdentifier) : '');
                 }
             )),
             'node2' => $this->createParser($this->returnCallback(
-                function(SimpleXMLElement $element, Compiler $compiler) {
-                    return $compiler->parseElements($element, (string)$element->attributes()->identifier);
+                function(SimpleXMLElement $element, Compiler $compiler, $parentIdentifier, array $parentIdentifiers = array()) {
+                    if ($parentIdentifier) {
+                        $parentIdentifiers[] = $parentIdentifier;
+                    }
+                    
+                    return $compiler->parseElements($element, (string)$element->attributes()->identifier, $parentIdentifiers);
                 }
             )),
             'node3' => $this->createParser($this->returnValue('Node3')),
-            'node4' => $this->createParser($this->returnValue(false))
+            'node4' => $this->createParser($this->returnValue(false)),
+            'node5' => $this->createParser($this->returnCallback(
+                function(SimpleXMLElement $element, Compiler $compiler, $parentIdentifier) {
+                    return $compiler->parseElements($element, $parentIdentifier); // Just resets data back
+                }
+            )),
+            'node6' => $this->createParser($this->returnCallback(
+                function(SimpleXMLElement $element, Compiler $compiler, $blockIdentifier, array $parentIdentifiers = array()) {
+                    return sprintf('Node6(%s, [%s])', $blockIdentifier, implode(', ', $parentIdentifiers));
+                }
+            )),
         );
 
         $compiler = new Compiler($this->getCompilerOptions() + array('parsers' => $parsers));
@@ -284,6 +298,39 @@ class EcomDev_LayoutCompiler_CompilerTest
                 )),
                 array('Node1(specific)', 'Node1(specific)', 'Node1(specific)'),
                 'specific'
+            ),
+            array(
+                $this->createXmlElement('general_data', array(
+                    'node2' => array(
+                        array(
+                            '@identifier' => 'one',
+                            'node2' => array(
+                                '@identifier' => 'two',
+                                'node5' => array(
+                                    'node2' => array(
+                                        '@identifier' => 'three',
+                                        'node6' => array(
+                                            'key'=> 'value'
+                                        )
+                                    )
+                                ),
+                                'node6' => array(
+                                    'key'=> 'value'
+                                ),
+                                'node2' => array(
+                                    '@identifier' => 'four',
+                                    'node6' => array('key' => 'value')
+                                )
+                            )
+                        ),
+                        array(
+                            '@identifier' => 'five',
+                            'node6' => array('key' => 'value')
+                        ),
+
+                    )
+                )),
+                array('Node6(three, [two])', 'Node6(two, [one])', 'Node6(four, [one, two])', 'Node6(five, [])')
             ),
         );
         

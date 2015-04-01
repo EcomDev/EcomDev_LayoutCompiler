@@ -42,8 +42,9 @@ interface EcomDev_LayoutCompiler_Contract_CompilerInterface
      * Parses an xml element with one of defined parsers
      * 
      * @param SimpleXMLElement $element
-     * @param string|null $parentIdentifier
+     * @param string|null $blockIdentifier
+     * @param string[] $parentIdentifiers
      * @return string[]
      */
-    public function parseElements(SimpleXMLElement $element, $parentIdentifier = null);
+    public function parseElements(SimpleXMLElement $element, $blockIdentifier = null, array $parentIdentifiers = array());
 }

@@ -34,7 +34,15 @@ class EcomDev_LayoutCompiler_Layout_Item_IncludeTest
     {
         $processor = $this->createProcessor();
         $loader = $this->createLoader();
-        $layout = $this->createLayout($loader);
+        $update = $this->createUpdate();
+        $index = $this->createIndex();
+        
+        $update->expects($this->once())
+            ->method('getIndex')
+            ->with(EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface::INDEX_NORMAL)
+            ->willReturn($index);
+        
+        $layout = $this->createLayout($loader, $update);
      
         $loader->expects($this->once())
             ->method('isLoaded')
@@ -44,7 +52,7 @@ class EcomDev_LayoutCompiler_Layout_Item_IncludeTest
         
         $loader->expects($this->once())
             ->method('loadIntoProcessor')
-            ->with('handle_that_is_not_loaded', $processor)
+            ->with('handle_that_is_not_loaded', $processor, $index)
             ->after('is_loaded')
             ->willReturnSelf();
         

@@ -16,7 +16,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     private $processorInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface';
     private $loaderInterface = 'EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface';
     private $updateInterface = 'EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface';
-    private $indexInterface = 'EcomDev_LayoutCompiler_Contract_Layout_IndexInterface';
+    private $indexInterface = 'EcomDev_LayoutCompiler_Contract_IndexInterface';
     private $errorProcessorInterface = 'EcomDev_LayoutCompiler_Contract_ErrorProcessorInterface';
     
     /**
@@ -190,6 +190,16 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     }
 
     /**
+     * Returns a mock of index interface
+     *
+     * @return EcomDev_LayoutCompiler_Contract_IndexInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createIndex()
+    {
+        return $this->getMockForAbstractClass($this->indexInterface);
+    }
+
+    /**
      * Returns a mock of processor interface
      *
      * @return EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface|PHPUnit_Framework_MockObject_MockObject
@@ -236,7 +246,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
      */
     private function createBlockAwareLayoutItem()
     {
-        return $this->getMockForAbstractClass($this->layoutItemInterface);
+        return $this->getMockForAbstractClass($this->layoutItemBlockAware);
     }
 
 
@@ -258,8 +268,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
                 $this->compilerInterface => 'getCompiler',
                 $this->processorInterface => 'getProcessor',
                 $this->loaderInterface => 'getLoader',
-                $this->updateInterface => 'getUpdate',
-                $this->indexInterface => 'getIndex'
+                $this->updateInterface => 'getUpdate'
             )
         );
         
@@ -279,6 +288,24 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
             }
         }
         
+        return $this;
+    }
+
+    /**
+     * Writes an attribute to object
+     * 
+     * @param object $object
+     * @param string $attribute
+     * @param mixed $value
+     * @return $this
+     */
+    private function writeAttribute($object, $attribute, $value)
+    {
+        $reflection = new ReflectionObject($object);
+        $property = $reflection->getProperty($attribute);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+        $property->setAccessible(false);
         return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 use EcomDev_LayoutCompiler_Contract_Layout_ItemInterface as ItemInterface;
 use EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface as ProcessorInterface;
+use EcomDev_LayoutCompiler_Contract_IndexInterface as IndexInterface;
 
 /**
  * Layout loader interface
@@ -13,9 +14,10 @@ interface EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface
      * Loads handle items
      * 
      * @param string|string[] $handleName
+     * @param IndexInterface $index
      * @return ItemInterface[]
      */
-    public function load($handleName);
+    public function load($handleName, IndexInterface $index);
 
     /**
      * Check if handle has been already loaded
@@ -30,9 +32,10 @@ interface EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface
      * 
      * @param string|string[] $handleName
      * @param ProcessorInterface $processor
+     * @param IndexInterface $index
      * @return $this
      */
-    public function loadIntoProcessor($handleName, ProcessorInterface $processor);
+    public function loadIntoProcessor($handleName, ProcessorInterface $processor, IndexInterface $index);
 
     /**
      * Resets state of loader

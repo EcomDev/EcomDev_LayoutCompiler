@@ -2,6 +2,7 @@
 
 use EcomDev_LayoutCompiler_Contract_LayoutInterface as LayoutInterface;
 use EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface as ProcessorInterface;
+use EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface as UpdateInterface;
 
 class EcomDev_LayoutCompiler_Layout_Item_Include 
     implements EcomDev_LayoutCompiler_Contract_Layout_ItemInterface
@@ -35,7 +36,9 @@ class EcomDev_LayoutCompiler_Layout_Item_Include
         $loader = $layout->getLoader();
         
         if (!$loader->isLoaded($this->handle)) {
-            $loader->loadIntoProcessor($this->handle, $processor);
+            $loader->loadIntoProcessor($this->handle, $processor, $layout->getUpdate()->getIndex(
+                UpdateInterface::INDEX_NORMAL
+            ));
         }
         
         return $this;

@@ -11,7 +11,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     private $sourceInterface = 'EcomDev_LayoutCompiler_Contract_Layout_SourceInterface';
     private $layoutInterface = 'EcomDev_LayoutCompiler_Contract_LayoutInterface';
     private $layoutItemInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ItemInterface';
-    private $layoutItemBlockAware = 'EcomDev_LayoutCompiler_Layout_AbstractBlockItem';
+    private $layoutItemBlockAware = 'EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem';
     private $compilerInterface = 'EcomDev_LayoutCompiler_Contract_CompilerInterface';
     private $processorInterface = 'EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface';
     private $loaderInterface = 'EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface';
@@ -232,21 +232,30 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
     /**
      * Returns a mock of compiler interface
      *
+     * @param null|int $type
+     * @param int $countItem
      * @return EcomDev_LayoutCompiler_Contract_Layout_ItemInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private function createLayoutItem()
+    private function createLayoutItem($type = null, $countItem = 1)
     {
-        return $this->getMockForAbstractClass($this->layoutItemInterface);
+        $item = $this->getMockForAbstractClass($this->layoutItemInterface);
+        if ($type !== null) {
+            $item->expects($this->exactly($countItem))
+                ->method('getType')
+                ->willReturn($type);
+        }
+        return $item;
     }
 
     /**
      * Returns a mock of compiler interface
      *
+     * @param array $arguments
      * @return EcomDev_LayoutCompiler_Contract_Layout_ItemInterface|PHPUnit_Framework_MockObject_MockObject
      */
-    private function createBlockAwareLayoutItem()
+    private function createBlockAwareLayoutItem(array $arguments = array())
     {
-        return $this->getMockForAbstractClass($this->layoutItemBlockAware);
+        return $this->getMockForAbstractClass($this->layoutItemBlockAware, $arguments);
     }
 
 
@@ -255,7 +264,7 @@ trait EcomDev_LayoutCompiler_HelperTestTrait
      * 
      * If you 
      * 
-     * @return EcomDev_LayoutCompiler_Contract_LayoutInterface
+     * @return EcomDev_LayoutCompiler_Contract_LayoutInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private function createLayout()
     {

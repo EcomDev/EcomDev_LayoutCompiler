@@ -1,0 +1,11 @@
+<config>
+    <modules>
+        <EcomDev_LayoutCompiler>
+            <codePool>community</codePool>
+            <active>true</active>
+            <depends>
+                <Mage_Core/>
+            </depends>
+        </EcomDev_LayoutCompiler>
+    </modules>
+</config>

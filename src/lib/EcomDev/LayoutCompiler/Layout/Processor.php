@@ -157,5 +157,4 @@ class EcomDev_LayoutCompiler_Layout_Processor
         $this->itemByBlockAndType = array();
         return $this;
     }
-    
 }

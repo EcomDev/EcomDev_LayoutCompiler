@@ -11,4 +11,3 @@ class EcomDev_LayoutCompiler_Exporter_ExpressionTest
         $this->assertSame('String value', (string)$expression);
     }
 }
-

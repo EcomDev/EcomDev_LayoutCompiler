@@ -2,6 +2,10 @@
 
 use EcomDev_LayoutCompiler_Contract_LayoutInterface as LayoutInterface;
 
+/**
+ * Layout Aware interface default implementation
+ * 
+ */
 trait EcomDev_LayoutCompiler_LayoutAwareTrait
 {
     /**

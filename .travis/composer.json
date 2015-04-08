@@ -1,0 +1,35 @@
+{
+  "name": "ecomdev/layout-compiler",
+  "license": "OSL-3.0",
+  "type": "magento-module",
+  "description": "Layout Compiler For Magento (travis development build)",
+  "require": {
+    "php": ">=5.4.0",
+    "magento-hackathon/magento-composer-installer": "dev-master"
+  },
+  "require-dev": {
+    "ecomdev/ecomdev_phpunit": "dev-dev",
+    "mikey179/vfsStream": "*",
+    "ecomdev/mage-ci": "*",
+    "satooshi/php-coveralls": "dev-master",
+    "phpunit/phpcov": "*"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "http://packages.firegento.com"
+    }
+  ],
+  "authors":[
+    {
+      "name":"Ivan Chepurnyi",
+      "email": "ivan@ecomdev.org"
+    }
+  ],
+  "config": {
+    "bin-dir": "bin"
+  },
+  "extra": {
+    "magento-root-dir": "build"
+  }
+}

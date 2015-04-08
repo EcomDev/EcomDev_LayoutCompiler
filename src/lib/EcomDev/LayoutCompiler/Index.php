@@ -2,6 +2,11 @@
 
 use EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface as MetadataInterface;
 
+/**
+ * Compiler Index implementation
+ * 
+ * Makes it possible to 
+ */
 class EcomDev_LayoutCompiler_Index 
     implements EcomDev_LayoutCompiler_Contract_IndexInterface, 
                EcomDev_LayoutCompiler_Contract_ErrorProcessorAwareInterface
@@ -49,12 +54,24 @@ class EcomDev_LayoutCompiler_Index
         
         return false;
     }
-    
+
+    /**
+     * Returns a file name for an index
+     * 
+     * @param array $parameters
+     * @return string
+     */
     private function getIndexFileName(array $parameters)
     {
         return $this->getSavePath() . '/' . $this->getIndexIdentifier($parameters) . '.php';
     }
-    
+
+    /**
+     * Returns an identifier of index based on supplied parameters
+     * 
+     * @param array $parameters
+     * @return string
+     */
     public function getIndexIdentifier(array $parameters)
     {
         $identifier = 'index_'; 

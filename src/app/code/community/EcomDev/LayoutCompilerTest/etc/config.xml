@@ -1,0 +1,9 @@
+<config>
+    <phpunit>
+        <suite>
+            <modules>
+                <EcomDev_LayoutCompilerTest />
+            </modules>
+        </suite>
+    </phpunit>
+</config>

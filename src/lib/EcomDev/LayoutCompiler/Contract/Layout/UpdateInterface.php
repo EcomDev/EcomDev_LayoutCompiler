@@ -60,7 +60,7 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
      * Loads index for a normal type of data
      *
      * @param string $type type of the index
-     * @return EcomDev_LayoutCompiler_Contract_IndexInterface
+     * @return IndexInterface
      */
     public function loadIndex($type = self::INDEX_NORMAL);
 
@@ -68,7 +68,7 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
      * Returns an instance of index with a specified type
      *
      * @param string $type type of the index
-     * @return EcomDev_LayoutCompiler_Contract_IndexInterface
+     * @return IndexInterface
      */
     public function getIndex($type = self::INDEX_NORMAL);
 }

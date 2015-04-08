@@ -3,29 +3,32 @@ php:
   - 5.4
   - 5.5
   - 5.6
-# env:
-#  - MAGE=1.9.1.0
-#  - MAGE=1.9.0.1
-#  - MAGE=1.8.1.0
+env:
+  - MAGE=1.9.1.0
+  - MAGE=1.8.1.0
+  - MAGE=1.7.2.0
 before_script:
   - MAGE_DIR=build
   # Install mage-ci
   - source <(curl -s https://raw.githubusercontent.com/EcomDev/MageCI/master/installer)
   # Installing magento version with prepared DB dump
-#  - bin/mage-ci install $MAGE_DIR $MAGE magento -c
+  - bin/mage-ci install $MAGE_DIR $MAGE magento -c
+  # Copy composer.json for a build (without magento dependency)
+  - cp .travis/composer.json ./composer.json
   # Update composer
   - composer self-update
   # Installing dependencies
   - composer install
   # Configuring EcomDev_PHPUnit module
-#  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a install
-#  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a magento-config --db-name magento --same-db 1 --base-url http://test.magento.com/
-#  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a change-status
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a install
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a magento-config --db-name magento --same-db 1 --base-url http://test.magento.com/
   # Installing main module into Magento module
-#  - bin/mage-ci install-module $MAGE_DIR $(pwd)
+  - bin/mage-ci install-module $MAGE_DIR $(pwd)
+  - cp .travis/EcomDev_LayoutCompilerTestEnabler.xml build/app/etc/modules/
   - mkdir -p build/var/phpunit/cov
 script:
   - bin/phpunit -c phpunit.xml --colors --coverage-php=build/var/phpunit/cov/unit.cov
+  - bin/mage-ci phpunit.xml $MAGE_DIR --colors --coverage-php=build/var/phpunit/cov/$MAGE_DIR.cov
 after_script:
   - bin/phpcov merge build/var/phpunit/cov --clover build/var/phpunit/coverage.xml 
   - bin/coveralls -v

@@ -1,0 +1,9 @@
+<config>
+    <global>
+        <models>
+            <ecomdev_layoutcompiler>
+                <class>EcomDev_LayoutCompiler_Model</class>
+            </ecomdev_layoutcompiler>
+        </models>
+    </global>
+</config>

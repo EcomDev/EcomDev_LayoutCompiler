@@ -1,0 +1,3 @@
+src/app/code/community/EcomDev/*            app/code/community/EcomDev
+src/app/etc/modules/*.xml                   app/etc/modules/
+src/lib/EcomDev/*                           lib/EcomDev

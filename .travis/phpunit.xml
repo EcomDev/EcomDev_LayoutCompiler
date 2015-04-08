@@ -20,7 +20,8 @@
    </testsuite>
    <filter>
        <whitelist>
-            <directory suffix=".php">app/code/community/EcomDev/LayoutCompiler</directory>
+           <directory suffix=".php">app/code/community/EcomDev/LayoutCompiler</directory>
+           <directory suffix=".php">lib/EcomDev/LayoutCompiler</directory>
        </whitelist>
    </filter>
 </phpunit>

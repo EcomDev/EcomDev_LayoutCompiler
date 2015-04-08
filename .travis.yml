@@ -23,9 +23,13 @@ before_script:
   # Configuring EcomDev_PHPUnit module
   - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a install
   - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a magento-config --db-name magento --same-db 1 --base-url http://test.magento.com/
+  # Disable phpnunit extension unit tests
+  - bin/mage-ci shell $MAGE_DIR ecomdev-phpunit.php -a change-status
   # Installing main module into Magento module
   - bin/mage-ci install-module $MAGE_DIR $(pwd)
+  # Enable
   - cp .travis/EcomDev_LayoutCompilerTestEnabler.xml build/app/etc/modules/
+  - cp .travis/phpunit.xml build/
   - mkdir -p build/var/phpunit/cov
 script:
   - bin/phpunit -c phpunit.xml --colors --coverage-php=build/var/phpunit/cov/unit.cov

@@ -29,7 +29,7 @@ before_script:
   - mkdir -p build/var/phpunit/cov
 script:
   - bin/phpunit -c phpunit.xml --colors --coverage-php=build/var/phpunit/cov/unit.cov
-  - bin/mage-ci phpunit $MAGE_DIR --colors --coverage-php=build/var/phpunit/cov/$MAGE_DIR.cov
+  - bin/mage-ci phpunit $MAGE_DIR --colors --coverage-php=var/phpunit/cov/$MAGE_DIR.cov
 after_script:
   - bin/phpcov merge build/var/phpunit/cov --clover build/var/phpunit/coverage.xml 
   - bin/coveralls -v

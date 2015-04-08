@@ -66,7 +66,7 @@ abstract class EcomDev_LayoutCompiler_AbstractFactory
         $arguments = func_get_args();
         $aliasOrClassName = array_shift($arguments);
 
-        if (current($arguments) === null && count($arguments) === 1) {
+        if ($argument === null && count($arguments) <= 1) {
             $arguments = array();
         }
 

@@ -6,7 +6,7 @@ php:
 env:
   - MAGE=1.9.1.0
   - MAGE=1.8.1.0
-  - MAGE=1.7.2.0
+  - MAGE=1.7.0.2 # Temporaly commented out
 before_script:
   - MAGE_DIR=build
   # Install mage-ci

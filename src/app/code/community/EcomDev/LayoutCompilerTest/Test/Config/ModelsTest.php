@@ -28,6 +28,18 @@ class EcomDev_LayoutCompilerTest_Test_Config_ModelsTest
             'factory' => array(
                 'ecomdev_layoutcompiler/factory',
                 'EcomDev_LayoutCompiler_Model_Factory'
+            ),
+            'compiler_parser_block_model' => array(
+                'ecomdev_layoutcompiler/compiler_parser_block',
+                'EcomDev_LayoutCompiler_Model_Compiler_Parser_Block'
+            ),
+            'compiler_parser_action_model' => array(
+                'ecomdev_layoutcompiler/compiler_parser_action',
+                'EcomDev_LayoutCompiler_Model_Compiler_Parser_Action'
+            ),
+            'cache_model' => array(
+                'ecomdev_layoutcompiler/cache',
+                'EcomDev_LayoutCompiler_Model_Cache'
             )
         );
     }

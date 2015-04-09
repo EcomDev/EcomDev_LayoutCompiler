@@ -66,14 +66,14 @@ abstract class EcomDev_LayoutCompiler_AbstractFactory
         $arguments = func_get_args();
         $aliasOrClassName = array_shift($arguments);
 
-        if ($argument === null && count($arguments) <= 1) {
+        if ($argument === null && count($arguments) < 1) {
             $arguments = array();
         }
 
         $className = $this->resolveClassName($this->resolveAlias($aliasOrClassName));
 
         if (empty($arguments)) {
-            $arguments = $this->getDefaultConstructorArgumentsFor($aliasOrClassName);
+            $arguments = $this->getDefaultConstructorArguments($aliasOrClassName);
         }
 
         $reflection = $this->getReflectionClass($className);
@@ -155,12 +155,12 @@ abstract class EcomDev_LayoutCompiler_AbstractFactory
     }
 
     /**
-     * Returns arguments for alias or class name
+     * Returns constructor arguments for alias or class name
      *
      * @param string $aliasOrClassName
      * @return mixed[]
      */
-    public function getDefaultConstructorArgumentsFor($aliasOrClassName)
+    public function getDefaultConstructorArguments($aliasOrClassName)
     {
         $alias = $this->resolveAliasWithCache($aliasOrClassName, 'arguments', $this->defaultConstructorArguments);
 

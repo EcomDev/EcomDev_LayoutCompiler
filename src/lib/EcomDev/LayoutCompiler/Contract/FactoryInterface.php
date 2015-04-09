@@ -40,6 +40,14 @@ interface EcomDev_LayoutCompiler_Contract_FactoryInterface
     public function setDefaultConstructorArguments($aliasOrClassName, array $arguments);
 
     /**
+     * Returns constructor arguments for alias or class name
+     *
+     * @param string $aliasOrClassName
+     * @return mixed[]
+     */
+    public function getDefaultConstructorArguments($aliasOrClassName);
+
+    /**
      * Class name alias, for easier resource creation
      * 
      * @param string $alias

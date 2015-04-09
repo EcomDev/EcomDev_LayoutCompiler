@@ -85,7 +85,7 @@ class EcomDev_LayoutCompiler_AbstractFactoryTest
 
         $this->assertSame(
             array('argument_one', 'argument_two'),
-            $this->factory->getDefaultConstructorArgumentsFor('reference_one')
+            $this->factory->getDefaultConstructorArguments('reference_one')
         );
     }
 
@@ -96,7 +96,7 @@ class EcomDev_LayoutCompiler_AbstractFactoryTest
 
         $this->assertSame(
             array('argument_one', 'argument_two'),
-            $this->factory->getDefaultConstructorArgumentsFor('reference_one')
+            $this->factory->getDefaultConstructorArguments('reference_one')
         );
     }
 
@@ -110,7 +110,7 @@ class EcomDev_LayoutCompiler_AbstractFactoryTest
             ->setClassAlias('reference_two', 'reference_three')
             ->setClassAlias('reference_three', 'reference_one');
 
-        $this->factory->getDefaultConstructorArgumentsFor('reference_one');
+        $this->factory->getDefaultConstructorArguments('reference_one');
     }
 
     public function testItRetrievesDefaultArgumentsForConstructorIfDataValuesIsProvided()
@@ -120,7 +120,7 @@ class EcomDev_LayoutCompiler_AbstractFactoryTest
 
         $this->assertSame(
             array(),
-            $this->factory->getDefaultConstructorArgumentsFor('reference_one')
+            $this->factory->getDefaultConstructorArguments('reference_one')
         );
     }
 

@@ -81,9 +81,9 @@ interface EcomDev_LayoutCompiler_Contract_LayoutInterface
     /**
      * Returns an instance of a block
      *
-     * @param string $alias
+     * @param string $classAlias
      * @param string $identifier
      * @return object
      */
-    public function newBlock($alias, $identifier = null);
+    public function newBlock($classAlias, $identifier = null);
 }

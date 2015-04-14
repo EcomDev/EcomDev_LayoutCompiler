@@ -39,6 +39,9 @@ class EcomDev_LayoutCompiler_ExporterTest extends PHPUnit_Framework_TestCase
             array("'string' . \"\\0\" . 'another'", "string\0another"),
             array("0", 0.00),
             array("1", 1),
+            array('null', null),
+            array('false', false),
+            array('true', true),
             array("100", 100)
         );
     }

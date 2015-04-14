@@ -5,6 +5,23 @@ class EcomDev_LayoutCompiler_Compiler_Parser_Reference
     implements EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface
 {
     /**
+     * Id attribute for a parser
+     *
+     * @var string
+     */
+    private $idAttribute;
+
+    /**
+     * Creates a new parser with an attribute identifier
+     *
+     * @param string $idAttribute
+     */
+    public function __construct($idAttribute = 'name')
+    {
+        $this->idAttribute = $idAttribute;
+    }
+
+    /**
      * Parses a simple xml element and returns an executable string for a layout node
      *
      * @param SimpleXMLElement $element
@@ -18,7 +35,16 @@ class EcomDev_LayoutCompiler_Compiler_Parser_Reference
                           $blockIdentifier = null,
                           $parentIdentifiers = array())
     {
-        $blockIdentifier = (isset($element->attributes()->name) ? $element->attributes()->name : null);
-        return $compiler->parseElements($element, $blockIdentifier);
+        if ($blockIdentifier !== null && !in_array($blockIdentifier, $parentIdentifiers, true)) {
+            $parentIdentifiers[] = $blockIdentifier;
+        }
+
+        $blockIdentifier = (
+            isset($element->attributes()->{$this->idAttribute}) ?
+                $element->attributes()->{$this->idAttribute}
+                : null
+        );
+
+        return $compiler->parseElements($element, $blockIdentifier, $parentIdentifiers);
     }
 }

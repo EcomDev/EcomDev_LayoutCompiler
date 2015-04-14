@@ -25,12 +25,12 @@ class EcomDev_LayoutCompiler_Compiler_Parser_ReferenceTest
         $compiler = $this->createCompiler();
         $compiler->expects($this->once())
             ->method('parseElements')
-            ->with($element, 'block')
+            ->with($element, 'block', array('block_zero', 'block_zero_and_half'))
             ->willReturn(array('Item1()'));
         
         $this->assertSame(
             array('Item1()'), 
-            $this->parser->parse($element, $compiler, 'some_data', array('some_data'))
+            $this->parser->parse($element, $compiler, 'block_zero_and_half', array('block_zero'))
         );
     }
     
@@ -40,7 +40,7 @@ class EcomDev_LayoutCompiler_Compiler_Parser_ReferenceTest
         $compiler = $this->createCompiler();
         $compiler->expects($this->once())
             ->method('parseElements')
-            ->with($element, null)
+            ->with($element, null, array('some_data'))
             ->willReturn(array());
 
         $this->assertSame(

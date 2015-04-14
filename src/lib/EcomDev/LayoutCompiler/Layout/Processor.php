@@ -7,9 +7,32 @@ class EcomDev_LayoutCompiler_Layout_Processor
 {
     use EcomDev_LayoutCompiler_LayoutAwareTrait;
 
+    /**
+     * List of all registered items
+     *
+     * @var ItemInterface[]
+     */
     private $items = array();
+
+    /**
+     * List of items by execution type
+     *
+     * @var ItemInterface[][]
+     */
     private $itemByType = array();
+
+    /**
+     * List of items associated with block identifier
+     *
+     * @var ItemInterface[][]
+     */
     private $itemByBlock = array();
+
+    /**
+     * List of items associated with block and particular execution type
+     *
+     * @var ItemInterface[][][]
+     */
     private $itemByBlockAndType = array();
     
     
@@ -129,7 +152,7 @@ class EcomDev_LayoutCompiler_Layout_Processor
     }
 
     /**
-     * Execute an type of action depending on a layout instance
+     * Execute a type of action depending on a layout instance
      *
      * @param int $type
      * @return $this
@@ -138,7 +161,6 @@ class EcomDev_LayoutCompiler_Layout_Processor
     {
         foreach ($this->findItemsByType($type) as $item) {
             $item->execute($this->getLayout(), $this);
-            $this->removeItem($item);
         }
         
         return $this;

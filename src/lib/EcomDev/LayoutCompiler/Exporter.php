@@ -12,11 +12,15 @@ class EcomDev_LayoutCompiler_Exporter
     /**
      * Exports value into php executable code
      *
-     * @param array|string|int|stdClass|ExpressionInterface $value
+     * @param array|string|null|int|stdClass|ExpressionInterface $value
      * @return string
      */
     public function export($value)
     {
+        if ($value === null) {
+            return 'null';
+        }
+
         if ($value instanceof ExpressionInterface) {
             return (string)$value;
         }

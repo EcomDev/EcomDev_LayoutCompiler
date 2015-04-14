@@ -98,13 +98,13 @@ class EcomDev_LayoutCompiler_Layout_ProcessorTest
         $this->assertEmpty($this->processor->findItemsByType(ItemInterface::TYPE_INITIALIZE));
     }
     
-    public function testItExecutesItemsAndRemovesThemFromList()
+    public function testItExecutesItemsButDoesNotRemoveThem()
     {
         $layout = $this->createLayout();
-        $layoutItemOne = $this->createLayoutItem(ItemInterface::TYPE_POST_INITIALIZE, 2);
-        $layoutItemTwo = $this->createLayoutItem(ItemInterface::TYPE_POST_INITIALIZE, 2);
+        $layoutItemOne = $this->createLayoutItem(ItemInterface::TYPE_POST_INITIALIZE);
+        $layoutItemTwo = $this->createLayoutItem(ItemInterface::TYPE_POST_INITIALIZE);
         $layoutItemThree = $this->createLayoutItem(ItemInterface::TYPE_LOAD);
-        
+
         $layoutItemOne->expects($this->once())
             ->method('execute')
             ->with($layout, $this->processor)
@@ -124,7 +124,8 @@ class EcomDev_LayoutCompiler_Layout_ProcessorTest
             $this->processor, $this->processor->execute(ItemInterface::TYPE_POST_INITIALIZE)
         );
         
-        $this->assertEmpty(
+        $this->assertSame(
+            array($layoutItemOne, $layoutItemTwo),
             $this->processor->findItemsByType(ItemInterface::TYPE_POST_INITIALIZE)
         );
         

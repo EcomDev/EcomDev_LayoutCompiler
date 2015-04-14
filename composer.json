@@ -13,6 +13,7 @@
     "mikey179/vfsStream": "*",
     "ecomdev/mage-ci": "*",
     "satooshi/php-coveralls": "dev-master",
+    "phpunit/php-code-coverage": "2.0.15",
     "phpunit/phpcov": "*"
   },
   "repositories": [

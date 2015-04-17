@@ -9,7 +9,7 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Block
     extends EcomDev_LayoutCompiler_Compiler_AbstractParser
 {
     /**
-     * Configures a block parser to use a specified class name
+     * Specifies which class to use for a parser output
      *
      * @param string $className
      */

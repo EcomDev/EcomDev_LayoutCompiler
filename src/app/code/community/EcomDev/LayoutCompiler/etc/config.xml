@@ -3,7 +3,11 @@
         <models>
             <ecomdev_layoutcompiler>
                 <class>EcomDev_LayoutCompiler_Model</class>
+                <resourceModel>ecomdev_layoutcompiler_resource</resourceModel>
             </ecomdev_layoutcompiler>
+            <ecomdev_layoutcompiler_resource>
+                <class>EcomDev_LayoutCompiler_Model_Resource</class>
+            </ecomdev_layoutcompiler_resource>
         </models>
     </global>
 </config>

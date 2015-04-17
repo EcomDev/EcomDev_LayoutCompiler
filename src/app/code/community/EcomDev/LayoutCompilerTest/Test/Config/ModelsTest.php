@@ -25,6 +25,10 @@ class EcomDev_LayoutCompilerTest_Test_Config_ModelsTest
                 'ecomdev_layoutcompiler/layout_update',
                 'EcomDev_LayoutCompiler_Model_Layout_Update'
             ),
+            'layout_source_database' => array(
+                'ecomdev_layoutcompiler/layout_source_database',
+                'EcomDev_LayoutCompiler_Model_Layout_Source_Database'
+            ),
             'factory' => array(
                 'ecomdev_layoutcompiler/factory',
                 'EcomDev_LayoutCompiler_Model_Factory'
@@ -40,6 +44,27 @@ class EcomDev_LayoutCompilerTest_Test_Config_ModelsTest
             'cache_model' => array(
                 'ecomdev_layoutcompiler/cache',
                 'EcomDev_LayoutCompiler_Model_Cache'
+            )
+        );
+    }
+
+    /**
+     * @param string $classAlias
+     * @param string $expectedClass
+     *
+     * @dataProvider dataProviderResourceModelAliases
+     */
+    public function testItHasResourceModelAliasDefinedForAModel($classAlias, $expectedClass)
+    {
+        $this->assertResourceModelAlias($classAlias, $expectedClass);
+    }
+
+    public function dataProviderResourceModelAliases()
+    {
+        return array(
+            'layout_source_database_resource_model' => array(
+                'ecomdev_layoutcompiler/layout_source_database',
+                'EcomDev_LayoutCompiler_Model_Resource_Layout_Source_Database'
             )
         );
     }

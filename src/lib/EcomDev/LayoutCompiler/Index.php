@@ -50,7 +50,7 @@ class EcomDev_LayoutCompiler_Index
         
         if ($result) {
             return true;
-        } 
+        }
         
         return false;
     }

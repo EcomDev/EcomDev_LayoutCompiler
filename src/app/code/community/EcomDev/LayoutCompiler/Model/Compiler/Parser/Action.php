@@ -3,13 +3,13 @@ use EcomDev_LayoutCompiler_Contract_CompilerInterface as CompilerInterface;
 use EcomDev_LayoutCompiler_Exporter_Expression as Expression;
 
 /**
- * Parser for an action tag
+ * Parser for an <action /> nodes in layout
  */
 class EcomDev_LayoutCompiler_Model_Compiler_Parser_Action
     extends EcomDev_LayoutCompiler_Compiler_AbstractParser
 {
     /**
-     * Specifies which class to use for a parser specification
+     * Specifies which class to use for a parser output
      *
      * @param string $className
      */

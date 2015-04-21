@@ -37,7 +37,7 @@ class EcomDev_LayoutCompiler_Layout_Item_Block
 
 
     /**
-     * Executes an action on layout object
+     * Creates a block in the layout, based on item arguments
      *
      * @param LayoutInterface $layout
      * @param ProcessorInterface $processor

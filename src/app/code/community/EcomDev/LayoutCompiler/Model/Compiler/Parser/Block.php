@@ -42,10 +42,16 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Block
 
         $arguments[] = $attributes;
 
-        if (isset($attributes['name'])) {
+        if (!empty($attributes['name']) && strpos($attributes['name'], '.') !== 0) {
             $arguments[] = $attributes['name'];
         } else {
-            $arguments[] = null;
+            $arguments[] = uniqid('ANONYMOUS_', true);
+            $arguments[0]['_ecomdev_system_option'] = array(
+                'is_anonymous' => true
+            );
+            if (!empty($attributes['name'])) {
+                $arguments[0]['_ecomdev_system_option']['anon_suffix'] = substr($attributes['name'], 1);
+            }
         }
 
         $arguments[] = $parentIdentifier;

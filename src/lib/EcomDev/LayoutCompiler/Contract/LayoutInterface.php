@@ -81,9 +81,12 @@ interface EcomDev_LayoutCompiler_Contract_LayoutInterface
     /**
      * Returns an instance of a block
      *
-     * @param string $classAlias
-     * @param string $identifier
+     * @param string $classAlias block class alias
+     * @param string $identifier block identifier
+     * @param string[] $options block options (before, after, template, etc)
      * @return object
      */
-    public function newBlock($classAlias, $identifier = null);
+    public function newBlock(
+        $classAlias, $identifier, array $options = array()
+    );
 }

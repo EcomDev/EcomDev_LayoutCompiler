@@ -91,7 +91,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
     }
 
     /**
-     * @className EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem
+     * @className EcomDev_LayoutCompiler_Layout_Item_Block
      */
     public function testItParsesAlsoBlocksWithoutName()
     {
@@ -100,22 +100,51 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
 
         $compiler->expects($this->once())
             ->method('parseElements')
-            ->with($element, null, array('block_zero', 'block_zero_and_half'))
+            ->with($element, $this->stringStartsWith('ANONYMOUS_'), array('block_zero', 'block_zero_and_half'))
             ->willReturn(array());
 
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
 
-        $this->assertSame(
-            array(
-                sprintf(
-                    'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
-                    "array('name_none' => 'block_one', 'parent' => 'block_two')",
-                    'null',
-                    "'block_two'",
-                    "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
-                )
+        $this->assertStringMatchesFormat(
+            sprintf(
+                'new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s)',
+                "array('name_none' => 'block_one', 'parent' => 'block_two', '_ecomdev_system_option' => array('is_anonymous' => true))",
+                "'ANONYMOUS_%s'",
+                "'block_two'",
+                "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
             ),
-            $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
+            current(
+                $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
+            )
+        );
+    }
+
+    /**
+     * @className EcomDev_LayoutCompiler_Layout_Item_Block
+     */
+    public function testItParsesAlsoBlocksWithAnonymousNameSuffix()
+    {
+        $element = new SimpleXMLElement('<block name=".blocksuffix" parent="block_two" />');
+        $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
+
+        $compiler->expects($this->once())
+            ->method('parseElements')
+            ->with($element, $this->stringStartsWith('ANONYMOUS_'), array('block_zero', 'block_zero_and_half'))
+            ->willReturn(array());
+
+        $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
+
+        $this->assertStringMatchesFormat(
+            sprintf(
+                'new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s)',
+                "array('name' => '.blocksuffix', 'parent' => 'block_two', '_ecomdev_system_option' => array('is_anonymous' => true, 'anon_suffix' => 'blocksuffix'))",
+                "'ANONYMOUS_%s'",
+                "'block_two'",
+                "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
+            ),
+            current(
+                $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
+            )
         );
     }
 }

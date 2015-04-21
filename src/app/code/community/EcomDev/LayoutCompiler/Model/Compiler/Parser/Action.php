@@ -37,11 +37,11 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Action
             $attributes[$key] = (string)$value;
         }
 
-        if (empty($attributes['method']) || empty($attributes['block'])) {
+        if (empty($attributes['method']) || (empty($blockIdentifier) && empty($attributes['block']))) {
             return false;
         }
 
-        if (isset($attributes['block'])) {
+        if (!empty($attributes['block'])) {
             $blockIdentifier = $attributes['block'];
         }
 

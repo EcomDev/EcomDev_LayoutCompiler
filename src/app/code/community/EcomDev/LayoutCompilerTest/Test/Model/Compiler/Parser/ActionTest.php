@@ -76,6 +76,26 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_ActionTest
     /**
      * @className EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem
      */
+    public function testItCorrectlyParsesAMethodCallWithoutArgumentsAndOnlyParentBlockFromArguments()
+    {
+        $element = new SimpleXMLElement('<action method="setMethod" ifconfig="some/path" />');
+        $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
+        $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
+        $this->assertEquals(
+            sprintf(
+                'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
+                "array('method' => 'setMethod', 'ifconfig' => 'some/path')",
+                "'one'",
+                'function ($block) { return $block->setMethod(); }',
+                "array(0 => 'block_zero')"
+            ),
+            $this->parser->parse($element, $compiler, 'one', array('block_zero'))
+        );
+    }
+
+    /**
+     * @className EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem
+     */
     public function testItCorrectlyParsesAMethodCallWithRegularArguments()
     {
         $element = new SimpleXMLElement(

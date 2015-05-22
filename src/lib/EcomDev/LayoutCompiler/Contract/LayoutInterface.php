@@ -9,8 +9,7 @@ use EcomDev_LayoutCompiler_Contract_CompilerInterface as CompilerInterface;
  * 
  */
 interface EcomDev_LayoutCompiler_Contract_LayoutInterface
-    extends EcomDev_LayoutCompiler_Contract_CacheAwareInterface, 
-            EcomDev_LayoutCompiler_Contract_PathAwareInterface,
+    extends EcomDev_LayoutCompiler_Contract_PathAwareInterface,
             EcomDev_LayoutCompiler_Contract_FactoryAwareInterface
 {
     /**
@@ -50,13 +49,6 @@ interface EcomDev_LayoutCompiler_Contract_LayoutInterface
     public function getCompiler();
     
     /**
-     * Loads instructions 
-     * 
-     * @return $this
-     */
-    public function load();
-
-    /**
      * Loads instructions
      *
      * @return $this
@@ -65,10 +57,11 @@ interface EcomDev_LayoutCompiler_Contract_LayoutInterface
 
     /**
      * Generate layout blocks
-     * 
+     *
+     * @param SimpleXMLElement|null $parent
      * @return $this
      */
-    public function generateBlocks();
+    public function generateBlocks($parent = null);
 
     /**
      * Finds a block by its identifier

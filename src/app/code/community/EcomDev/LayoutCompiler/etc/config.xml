@@ -9,5 +9,48 @@
                 <class>EcomDev_LayoutCompiler_Model_Resource</class>
             </ecomdev_layoutcompiler_resource>
         </models>
+        <helpers>
+            <ecomdev_layoutcompiler>
+                <class>EcomDev_LayoutCompiler_Helper</class>
+            </ecomdev_layoutcompiler>
+        </helpers>
+        <events>
+            <ecomdev_layoutcompiler_factory_init>
+                <observers>
+                    <ecomdev_layoutcompiler>
+                        <class>ecomdev_layoutcompiler/observer</class>
+                        <method>onFactoryInitialize</method>
+                    </ecomdev_layoutcompiler>
+                </observers>
+            </ecomdev_layoutcompiler_factory_init>
+            <ecomdev_layoutcompiler_layout_init>
+                <observers>
+                    <ecomdev_layoutcompiler>
+                        <class>ecomdev_layoutcompiler/observer</class>
+                        <method>onLayoutInitialize</method>
+                    </ecomdev_layoutcompiler>
+                </observers>
+            </ecomdev_layoutcompiler_layout_init>
+            <controller_action_predispatch>
+                <observers>
+                    <ecomdev_layoutcompiler>
+                        <class>ecomdev_layoutcompiler/observer</class>
+                        <method>replaceLayout</method>
+                    </ecomdev_layoutcompiler>
+                </observers>
+            </controller_action_predispatch>
+        </events>
     </global>
+    <test>
+        <events>
+            <controller_front_init_routers>
+                <observers>
+                    <ecomdev_layoutcompiler>
+                        <class>ecomdev_layoutcompiler/observer</class>
+                        <method>disableInTest</method>
+                    </ecomdev_layoutcompiler>
+                </observers>
+            </controller_front_init_routers>
+        </events>
+    </test>
 </config>

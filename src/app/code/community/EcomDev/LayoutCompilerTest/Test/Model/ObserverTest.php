@@ -18,7 +18,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
     public function testItSpecifiesDefaultConfigurationForClassAliasesAndDefaultSavePath()
     {
         $factory = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_FactoryInterface');
-        $factory->expects($this->exactly(15))
+        $factory->expects($this->exactly(16))
             ->method('setClassAlias')
             ->withConsecutive(
                 ['layout', 'ecomdev_layoutcompiler/layout'],
@@ -35,14 +35,15 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
                 ['compiler_parser_remove', 'EcomDev_LayoutCompiler_Compiler_Parser_Remove'],
                 ['compiler_parser_block', 'ecomdev_layoutcompiler/compiler_parser_block'],
                 ['compiler_parser_action', 'ecomdev_layoutcompiler/compiler_parser_action'],
-                ['cache', 'ecomdev_layoutcompiler/cache']
+                ['cache', 'ecomdev_layoutcompiler/cache'],
+                ['index', 'EcomDev_LayoutCompiler_Index']
             )
             ->willReturnSelf()
         ;
 
         $expectedVarDirectory = Mage::getBaseDir('var') . DS . 'ecomdev' . DS . 'layoutcompiler';
 
-        $factory->expects($this->exactly(2))
+        $factory->expects($this->exactly(4))
             ->method('setDependencyInjectionInstruction')
             ->withConsecutive(
                 array(
@@ -54,6 +55,16 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
                     'EcomDev_LayoutCompiler_Contract_ExporterAwareInterface',
                     'setExporter',
                     $this->isInstanceOf('EcomDev_LayoutCompiler_Contract_ExporterInterface')
+                ),
+                array(
+                    'EcomDev_LayoutCompiler_Contract_FactoryAwareInterface',
+                    'setObjectFactory',
+                    $factory
+                ),
+                array(
+                    'EcomDev_LayoutCompiler_Contract_ErrorProcessorAwareInterface',
+                    'addErrorProcessor',
+                    $this->isInstanceOf('EcomDev_LayoutCompiler_Contract_ErrorProcessorInterface')
                 )
             )
             ->willReturnSelf();
@@ -78,7 +89,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
         $factory->expects($this->exactly(5))
             ->method('setDefaultConstructorArguments')
             ->withConsecutive(
-                ['compiler_parser_handle', ['EcomDev_LayoutCompiler_Layout_Item_Handle']],
+                ['compiler_parser_handle', ['EcomDev_LayoutCompiler_Layout_Item_Include']],
                 ['compiler_parser_remove', ['EcomDev_LayoutCompiler_Layout_Item_Remove']],
                 ['compiler_parser_block', ['EcomDev_LayoutCompiler_Layout_Item_Block']],
                 ['compiler_parser_action', ['EcomDev_LayoutCompiler_Model_Layout_Item_Action']],
@@ -123,12 +134,66 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
 
         $observer = $this->generateObserver(
             ['factory' => $factory, 'layout' => $layout],
-            'ecomdev_layoutcompiler_factory_layout_init'
+            'ecomdev_layoutcompiler_layout_init'
         );
 
         $this->observer->onLayoutInitialize($observer);
 
         $this->assertEventDispatched('ecomdev_layoutcompiler_observer_parsers_init_before');
         $this->assertEventDispatched('ecomdev_layoutcompiler_observer_parsers_init_after');
+    }
+
+    /**
+     * @singleton core/layout
+     */
+    public function testItReplacesRegularLayoutWithCompilerOne()
+    {
+        $manager = $this->mockModel('ecomdev_layoutcompiler/manager')
+            ->replaceByMock('singleton');
+
+        $manager->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+
+        $layout = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_LayoutInterface');
+        $manager->expects($this->once())
+            ->method('getLayout')
+            ->willReturn($layout);
+
+        $this->observer->replaceLayout();
+        $this->assertSame($layout, Mage::registry('_singleton/core/layout'));
+    }
+
+    /**
+     * @singleton core/layout
+     */
+    public function testItDoesNotReplaceRegularLayoutWithCompilerOne()
+    {
+        $manager = $this->mockModel('ecomdev_layoutcompiler/manager')
+            ->replaceByMock('singleton');
+
+        $manager->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $manager->expects($this->never())
+            ->method('getLayout');
+
+        $this->observer->replaceLayout();
+        $this->assertSame(null, Mage::registry('_singleton/core/layout'));
+    }
+
+    /**
+     * @singleton core/layout
+     */
+    public function testItGetsDisabledInTestEventArea()
+    {
+        $manager = $this->mockModel('ecomdev_layoutcompiler/manager')
+            ->replaceByMock('singleton');
+
+        $manager->expects($this->once())
+            ->method('disable');
+
+        $this->observer->disableInTest();
     }
 }

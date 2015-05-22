@@ -13,6 +13,20 @@ class EcomDev_LayoutCompiler_Layout_Loader
      * @var array
      */
     private $loaded = array();
+
+    /**
+     * List of items to be loaded
+     *
+     * @var ItemInterface
+     */
+    private $items = array();
+
+    /**
+     * Current processor
+     *
+     * @var ProcessorInterface
+     */
+    private $currentProcessor;
     
     /**
      * Loads handle items
@@ -23,25 +37,16 @@ class EcomDev_LayoutCompiler_Layout_Loader
      */
     public function load($handleName, IndexInterface $index)
     {
-        $items = array();
-        $total = 0;
         $files = $index->getHandleIncludes($handleName);
-        
-        $includeFile = function ($file) {
-            $value = @include $file;
-            if (!is_array($value)) {
-                $value = array();
-            }
-            return $value;
-        };
-            
+
+        $this->items = array();
         foreach ($files as $file) {
-            $newItems = $includeFile($file);
-            array_splice($items, $total, 0, $newItems);
-            $total += count($newItems);
+            @include $file;
         }
-        
+
         $this->loaded[$handleName] = true;
+        $items = $this->items;
+        $this->items = array();
         return $items;
     }
 
@@ -69,11 +74,16 @@ class EcomDev_LayoutCompiler_Layout_Loader
         if ($this->isLoaded($handleName)) {
             return $this;
         }
-        
-        $items = $this->load($handleName, $index);
-        foreach ($items as $item) {
-            $processor->addItem($item);
+
+        $files = $index->getHandleIncludes($handleName);
+
+        $this->currentProcessor = $processor;
+        foreach ($files as $file) {
+            @include $file;
         }
+
+        $this->currentProcessor = null;
+        $this->loaded[$handleName] = true;
         return $this;
     }
 
@@ -85,6 +95,23 @@ class EcomDev_LayoutCompiler_Layout_Loader
     public function reset()
     {
         $this->loaded = array();
+        return $this;
+    }
+
+    /**
+     * And item adder
+     *
+     * @param ItemInterface $item
+     * @return $this
+     */
+    public function addItem(ItemInterface $item)
+    {
+        if ($this->currentProcessor) {
+            $this->currentProcessor->addItem($item);
+            return $this;
+        }
+
+        $this->items[] = $item;
         return $this;
     }
 }

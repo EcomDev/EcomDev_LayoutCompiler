@@ -115,12 +115,12 @@ class EcomDev_LayoutCompiler_CompilerTest
         
         $this->assertStringEqualsFile(
             $handleFilePaths['item1'], 
-            "<?php return array(\n    new Node(),\n    new Node(),\n    new Node(),\n    new Node()\n);" 
+            "<?php \$this->addItem(new Node());\n\$this->addItem(new Node());\n\$this->addItem(new Node());\n\$this->addItem(new Node());"
         );
         
         $this->assertStringEqualsFile(
             $handleFilePaths['item2'],
-            "<?php return array(\n    new Node(),\n    new Node()\n);"
+            "<?php \$this->addItem(new Node());\n\$this->addItem(new Node());"
         );
         
         $this->assertFileNotExists($handleFilePaths['item3']);
@@ -174,7 +174,7 @@ class EcomDev_LayoutCompiler_CompilerTest
 
         $this->assertStringEqualsFile(
             $handleFilePaths['item1'],
-            "<?php return array(\n    new Node(),\n    new Node(),\n    new Node(),\n    new Node()\n);"
+            "<?php \$this->addItem(new Node());\n\$this->addItem(new Node());\n\$this->addItem(new Node());\n\$this->addItem(new Node());"
         );
 
         $this->assertFileNotExists($handleFilePaths['item2']);        

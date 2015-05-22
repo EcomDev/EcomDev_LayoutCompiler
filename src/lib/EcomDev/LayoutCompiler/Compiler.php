@@ -143,7 +143,11 @@ class EcomDev_LayoutCompiler_Compiler
                     mkdir(dirname($fileToSave), 0755, true);
                 }
                 file_put_contents(
-                    $fileToSave, sprintf("<?php return array(\n    %s\n);",  implode(",\n    ", $result[$handle]))
+                    $fileToSave, sprintf("<?php %s",  implode("\n",
+                        array_map(function ($item) {
+                            return sprintf('$this->addItem(%s);', $item);
+                        }, $result[$handle]))
+                    )
                 );
             }
             

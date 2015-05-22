@@ -43,4 +43,12 @@ interface EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface
      * @return $this
      */
     public function reset();
+
+    /**
+     * And item adder
+     *
+     * @param ItemInterface $item
+     * @return $this
+     */
+    public function addItem(ItemInterface $item);
 }

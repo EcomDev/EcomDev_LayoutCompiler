@@ -28,32 +28,30 @@ class EcomDev_LayoutCompiler_Layout_LoaderTest
         $this->fileSystem = Stream::setup('root');
         $files = array(
             'handle_one_file1.php' => sprintf(
-                '<?php return array(%s);',
-                implode("\n,", array(
-                    'new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_one")'
-                ))
+                '<?php %s',
+                '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_one"));'
             ),
             'handle_one_file2.php' => sprintf( // File that should be merged to file1
-                '<?php return array(%s);', 
-                implode("\n,", array(
-                    'new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_two")',
-                    'new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_three")',
+                '<?php %s',
+                implode("\n", array(
+                    '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_two"));',
+                    '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_three"));',
                 ))
             ), 
             'handle_two_file1.php' => sprintf( // File that has only one item
-                '<?php return array(%s);',
-                implode("\n,", array(
-                    'new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_two_block_one")'
+                '<?php %s',
+                implode("\n", array(
+                    '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_two_block_one"));'
                 ))
             ),
             'handle_three_file1.php' => sprintf( // File that returns an empty array
-                '<?php return array();'
+                '<?php '
             ),
             'handle_three_file2.php' => sprintf( // File that returns an empty array
-                '<?php return array();'
+                '<?php '
             ),
             'handle_four_file1.php' => sprintf( // File without content
-                '<?php array();'
+                '<?php '
             )
         );
         Stream::create($files, $this->fileSystem);

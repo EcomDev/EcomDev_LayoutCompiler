@@ -41,7 +41,7 @@ class EcomDev_LayoutCompiler_Compiler_Parser_Reference
 
         $blockIdentifier = (
             isset($element->attributes()->{$this->idAttribute}) ?
-                $element->attributes()->{$this->idAttribute}
+                (string)$element->attributes()->{$this->idAttribute}
                 : null
         );
 

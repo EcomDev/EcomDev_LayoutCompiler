@@ -46,8 +46,9 @@ class EcomDev_LayoutCompiler_Index
      */
     public function load(array $parameters)
     {
-        $result = @include $this->getIndexFileName($parameters);
-        
+        $file = $this->getIndexFileName($parameters);
+        $result = @include $file;
+
         if ($result) {
             return true;
         }
@@ -130,7 +131,6 @@ class EcomDev_LayoutCompiler_Index
             } catch (Exception $e) {
                 $this->reportException($e);
             }
-            
         }
         
         return $this;

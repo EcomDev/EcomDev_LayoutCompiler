@@ -56,9 +56,21 @@ class EcomDev_LayoutCompiler_Layout_Processor
         $this->items[$itemId] = $item;
         $this->itemByType[$itemType][$itemId] = $item;
         if ($item instanceof EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface) {
-            foreach ($item->getPossibleBlockIdentifiers() as $blockId) {
-                $this->itemByBlock[$blockId][$itemId] = $item;
-                $this->itemByBlockAndType[$blockId][$itemType][$itemId] = $item;
+            $blockIdentifiers = $item->getPossibleBlockIdentifiers();
+            $itemInfo = array($itemId => $item);
+
+            foreach ($blockIdentifiers as $blockId) {
+                if (!isset($this->itemByBlock[$blockId])) {
+                    $this->itemByBlock[$blockId] = $itemInfo;
+                } else {
+                    $this->itemByBlock[$blockId] += $itemInfo;
+                }
+
+                if (!isset($this->itemByBlockAndType[$itemType][$blockId])) {
+                    $this->itemByBlockAndType[$itemType][$blockId] = $itemInfo;
+                } else {
+                    $this->itemByBlockAndType[$itemType][$blockId] += $itemInfo;
+                }
             }
         }
         
@@ -92,7 +104,7 @@ class EcomDev_LayoutCompiler_Layout_Processor
         if ($item instanceof EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface) {
             foreach ($item->getPossibleBlockIdentifiers() as $block) {
                 unset($this->itemByBlock[$block][$itemId]);
-                unset($this->itemByBlockAndType[$block][$itemType][$itemId]);
+                unset($this->itemByBlockAndType[$itemType][$block][$itemId]);
             }
         }
         
@@ -144,8 +156,8 @@ class EcomDev_LayoutCompiler_Layout_Processor
     {
         $result = array();
         
-        if (isset($this->itemByBlockAndType[$identifier][$type])) {
-            $result = array_values($this->itemByBlockAndType[$identifier][$type]);
+        if (isset($this->itemByBlockAndType[$type][$identifier])) {
+            $result = array_values($this->itemByBlockAndType[$type][$identifier]);
         }
         
         return $result;

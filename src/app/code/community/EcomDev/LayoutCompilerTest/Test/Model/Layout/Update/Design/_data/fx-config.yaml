@@ -1,0 +1,2 @@
+config:
+  stores/default/advanced/modules_disable_output/Disabled_Module_In_Default_Store: 'true'

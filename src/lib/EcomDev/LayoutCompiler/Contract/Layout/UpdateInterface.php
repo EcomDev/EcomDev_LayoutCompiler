@@ -49,6 +49,13 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
     public function load($handles = array());
 
     /**
+     * Loads runtime updates into the processor
+     *
+     * @return $this
+     */
+    public function loadRuntime();
+
+    /**
      * Returns a list of sources by type
      * 
      * @param string $type
@@ -60,7 +67,7 @@ interface EcomDev_LayoutCompiler_Contract_Layout_UpdateInterface
      * Loads index for a normal type of data
      *
      * @param string $type type of the index
-     * @return IndexInterface
+     * @return bool
      */
     public function loadIndex($type = self::INDEX_NORMAL);
 

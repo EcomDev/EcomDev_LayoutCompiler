@@ -16,7 +16,7 @@ class EcomDev_LayoutCompiler_Model_Error_Processor
      */
     public function processException(Exception $e)
     {
-        Mage::logException($e);
+        // Mage::logException($e); // removed as needs more testing for valid files
         return $this;
     }
 }

@@ -77,12 +77,13 @@ class EcomDev_LayoutCompiler_Layout_Loader
 
         $files = $index->getHandleIncludes($handleName);
 
+        $previousProcessor = $this->currentProcessor;
         $this->currentProcessor = $processor;
         foreach ($files as $file) {
             @include $file;
         }
 
-        $this->currentProcessor = null;
+        $this->currentProcessor = $previousProcessor;
         $this->loaded[$handleName] = true;
         return $this;
     }
@@ -112,6 +113,22 @@ class EcomDev_LayoutCompiler_Layout_Loader
         }
 
         $this->items[] = $item;
+        return $this;
+    }
+
+    /**
+     * And item relation
+     *
+     * @param ItemInterface $item
+     * @param string $relatedBlockIdentifier
+     * @return $this
+     */
+    public function addItemRelation(ItemInterface $item, $relatedBlockIdentifier)
+    {
+        if ($this->currentProcessor) {
+            $this->currentProcessor->addItemRelation($item, $relatedBlockIdentifier);
+        }
+        
         return $this;
     }
 }

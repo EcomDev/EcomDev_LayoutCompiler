@@ -45,10 +45,19 @@ interface EcomDev_LayoutCompiler_Contract_Layout_LoaderInterface
     public function reset();
 
     /**
-     * And item adder
+     * And item into processer or just load list
      *
      * @param ItemInterface $item
      * @return $this
      */
     public function addItem(ItemInterface $item);
+
+    /**
+     * And item relation
+     *
+     * @param ItemInterface $item
+     * @param string $relatedBlockIdentifier
+     * @return $this
+     */
+    public function addItemRelation(ItemInterface $item, $relatedBlockIdentifier);
 }

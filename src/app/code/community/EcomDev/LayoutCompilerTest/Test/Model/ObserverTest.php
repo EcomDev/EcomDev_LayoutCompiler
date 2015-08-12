@@ -78,7 +78,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
         $metadataFactory = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface');
         $layout = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_LayoutInterface');
         $parsers = [
-            'handle' => $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface'),
+            'update' => $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface'),
             'reference' => $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface'),
             'remove' => $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface'),
             'block' => $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface'),
@@ -114,7 +114,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
             )
             ->willReturnOnConsecutiveCalls(
                 $metadataFactory,
-                $parsers['handle'],
+                $parsers['update'],
                 $parsers['reference'],
                 $parsers['remove'],
                 $parsers['block'],
@@ -148,6 +148,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
      */
     public function testItReplacesRegularLayoutWithCompilerOne()
     {
+        $originalValue = Mage::app()->getLayout();
         $manager = $this->mockModel('ecomdev_layoutcompiler/manager')
             ->replaceByMock('singleton');
 
@@ -162,6 +163,11 @@ class EcomDev_LayoutCompilerTest_Test_Model_ObserverTest
 
         $this->observer->replaceLayout();
         $this->assertSame($layout, Mage::registry('_singleton/core/layout'));
+        $this->assertSame($layout, Mage::app()->getLayout());
+
+        EcomDev_Utils_Reflection::setRestrictedPropertyValue(
+            Mage::app(), '_layout', $originalValue
+        );
     }
 
     /**

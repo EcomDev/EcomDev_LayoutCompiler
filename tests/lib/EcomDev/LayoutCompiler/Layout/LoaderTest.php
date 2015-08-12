@@ -35,7 +35,8 @@ class EcomDev_LayoutCompiler_Layout_LoaderTest
                 '<?php %s',
                 implode("\n", array(
                     '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_two"));',
-                    '$this->addItem(new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_three"));',
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_Remove("handle_one_block_three"));',
+                    '$this->addItemRelation($item, "handle_one_block_three");',
                 ))
             ), 
             'handle_two_file1.php' => sprintf( // File that has only one item
@@ -198,13 +199,20 @@ class EcomDev_LayoutCompiler_Layout_LoaderTest
         $processor = $this->createProcessor();
         $processor->expects($this->exactly(3))
             ->method('addItem')
+            ->id('addItem')
             ->withConsecutive(
                 array($this->equalTo(new RemoveItem('handle_one_block_one'))),
                 array($this->equalTo(new RemoveItem('handle_one_block_two'))),
                 array($this->equalTo(new RemoveItem('handle_one_block_three')))
             )
             ->willReturnSelf();
-            
+
+        $processor->expects($this->once())
+            ->method('addItemRelation')
+            ->after('addItem')
+            ->with($this->equalTo(new RemoveItem('handle_one_block_three')), 'handle_one_block_three')
+            ->willReturnSelf();
+
         $this->assertSame(
             $this->loader, 
             $this->loader->loadIntoProcessor('handle_one', $processor, $index)

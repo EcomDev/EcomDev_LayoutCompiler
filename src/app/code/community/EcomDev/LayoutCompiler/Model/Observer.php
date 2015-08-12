@@ -76,7 +76,7 @@ class EcomDev_LayoutCompiler_Model_Observer
         $data = new stdClass();
         $data->metadata_factory = $factory->createInstance('compiler_metadata_factory');
         $data->parsers = [
-            'handle' => $factory->createInstance('compiler_parser_handle'),
+            'update' => $factory->createInstance('compiler_parser_handle'),
             'reference' => $factory->createInstance('compiler_parser_reference'),
             'remove' => $factory->createInstance('compiler_parser_remove'),
             'block' => $factory->createInstance('compiler_parser_block'),
@@ -111,6 +111,13 @@ class EcomDev_LayoutCompiler_Model_Observer
             if ($layout !== Mage::registry('_singleton/core/layout')) {
                 Mage::unregister('_singleton/core/layout');
                 Mage::register('_singleton/core/layout', $layout);
+                if (Mage::app()->getLayout() !== $layout) {
+                    $appReflection = new ReflectionObject(Mage::app());
+                    $property = $appReflection->getProperty('_layout');
+                    $property->setAccessible(true);
+                    $property->setValue(Mage::app(), $layout);
+                    $property->setAccessible(false);
+                }
             }
         }
     }

@@ -17,7 +17,6 @@ before_script:
   - bin/mage-ci install $MAGE_DIR $MAGE magento -c
   # Copy composer.json for a build (without magento dependency)
   - cp .travis/composer.json ./composer.json
-  - rm composer.lock
   # Update composer
   - composer self-update
   # Installing dependencies

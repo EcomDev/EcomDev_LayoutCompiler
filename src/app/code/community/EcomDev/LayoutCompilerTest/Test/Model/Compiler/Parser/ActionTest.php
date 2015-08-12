@@ -2,6 +2,7 @@
 
 use EcomDev_LayoutCompiler_Model_Export_Expression_Helper as HelperExpression;
 use EcomDev_LayoutCompiler_Model_Export_Expression_Translate as TranslateExpression;
+use EcomDev_LayoutCompiler_Exporter_Expression as Expression;
 
 /**
  * Test case for action tag parser
@@ -62,12 +63,16 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_ActionTest
         $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
         $this->assertEquals(
-            sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
-                "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path')",
-                "'one'",
-                'function ($block) { return $block->setMethod(); }',
-                "array(0 => 'block_zero')"
+            array(
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
+                    "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path')",
+                    "'one'",
+                    'function ($block) { return $block->setMethod(); }',
+                    "array(0 => 'block_zero')"
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')"),
             ),
             $this->parser->parse($element, $compiler, null, array('block_zero'))
         );
@@ -82,12 +87,16 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_ActionTest
         $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
         $this->assertEquals(
-            sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
-                "array('method' => 'setMethod', 'ifconfig' => 'some/path')",
-                "'one'",
-                'function ($block) { return $block->setMethod(); }',
-                "array(0 => 'block_zero')"
+            array(
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
+                    "array('method' => 'setMethod', 'ifconfig' => 'some/path')",
+                    "'one'",
+                    'function ($block) { return $block->setMethod(); }',
+                    "array(0 => 'block_zero')"
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')"),
             ),
             $this->parser->parse($element, $compiler, 'one', array('block_zero'))
         );
@@ -107,12 +116,16 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_ActionTest
         $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
         $this->assertEquals(
-            sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
-                "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path')",
-                "'one'",
-                "function (\$block) { return \$block->setMethod(array('one' => 'value1', 'two' => 'value2'), 'value2'); }",
-                "array(0 => 'block_zero')"
+            array(
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
+                    "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path')",
+                    "'one'",
+                    "function (\$block) { return \$block->setMethod(array('one' => 'value1', 'two' => 'value2'), 'value2'); }",
+                    "array(0 => 'block_zero')"
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')")
             ),
             $this->parser->parse($element, $compiler, null, array('block_zero'))
         );
@@ -131,12 +144,16 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_ActionTest
         $compiler = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CompilerInterface');
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
         $this->assertEquals(
-            sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
-                "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path', 'json' => 'one two three four')",
-                "'one'",
-                "function (\$block) { return \$block->setMethod(array('key1' => 'value1'), array('key2' => 'value2'), true, 1, 'Text'); }",
-                "array(0 => 'block_zero')"
+            array(
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
+                    "array('method' => 'setMethod', 'block' => 'one', 'ifconfig' => 'some/path', 'json' => 'one two three four')",
+                    "'one'",
+                    "function (\$block) { return \$block->setMethod(array('key1' => 'value1'), array('key2' => 'value2'), true, 1, 'Text'); }",
+                    "array(0 => 'block_zero')"
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')")
             ),
             $this->parser->parse($element, $compiler, null, array('block_zero'))
         );

@@ -230,6 +230,7 @@ class EcomDev_LayoutCompiler_Model_Layout
         }
 
         $this->getProcessor()->execute(ItemInterface::TYPE_LOAD);
+        $this->getProcessor()->reset();
     }
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+use EcomDev_LayoutCompiler_Exporter_Expression as Expression;
+
 /**
  * Test block parser for a compiler
  *
@@ -46,18 +48,22 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
 
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
 
-        $this->assertSame(
+        $parserResult = $this->parser->parse($element, $compiler, 'block_zero_and_half', array('block_zero'));
+        $this->assertEquals(
             array(
-                sprintf(
-                    'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
                     "array('name' => 'block_one', 'type' => 'class/name', 'other_attribute' => 'test/magento')",
                     "'block_one'",
                     "'block_zero_and_half'",
                     "array(0 => 'block_zero')"
-                ),
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'block_one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero_and_half')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')"),
                 'Item1()'
             ),
-            $this->parser->parse($element, $compiler, 'block_zero_and_half', array('block_zero'))
+            $parserResult
         );
     }
 
@@ -76,17 +82,23 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
 
         $this->parser->setExporter(new EcomDev_LayoutCompiler_Exporter());
 
-        $this->assertSame(
+        $parserResult = $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'));
+        $this->assertCount(5, $parserResult);
+        $this->assertEquals(
             array(
-                sprintf(
-                    'new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s)',
+                new Expression(sprintf(
+                    '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_AbstractBlockItem(%s, %s, %s, %s), false)',
                     "array('name' => 'block_one', 'parent' => 'block_two')",
                     "'block_one'",
                     "'block_two'",
                     "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
-                )
+                )),
+                new Expression("\$this->addItemRelation(\$item, 'block_one')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_two')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero')"),
+                new Expression("\$this->addItemRelation(\$item, 'block_zero_and_half')")
             ),
-            $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
+            $parserResult
         );
     }
 
@@ -107,13 +119,13 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
 
         $this->assertStringMatchesFormat(
             sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s)',
+                '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s), false)',
                 "array('name_none' => 'block_one', 'parent' => 'block_two', '_ecomdev_system_option' => array('is_anonymous' => true))",
                 "'ANONYMOUS_%s'",
                 "'block_two'",
                 "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
             ),
-            current(
+            (string)current(
                 $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
             )
         );
@@ -136,13 +148,13 @@ class EcomDev_LayoutCompilerTest_Test_Model_Compiler_Parser_BlockTest
 
         $this->assertStringMatchesFormat(
             sprintf(
-                'new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s)',
+                '$this->addItem($item = new EcomDev_LayoutCompiler_Layout_Item_Block(%s, %s, %s, %s), false)',
                 "array('name' => '.blocksuffix', 'parent' => 'block_two', '_ecomdev_system_option' => array('is_anonymous' => true, 'anon_suffix' => 'blocksuffix'))",
                 "'ANONYMOUS_%s'",
                 "'block_two'",
                 "array(0 => 'block_zero', 1 => 'block_zero_and_half')"
             ),
-            current(
+            (string)current(
                 $this->parser->parse($element, $compiler, 'block_zero', array('block_zero', 'block_zero_and_half'))
             )
         );

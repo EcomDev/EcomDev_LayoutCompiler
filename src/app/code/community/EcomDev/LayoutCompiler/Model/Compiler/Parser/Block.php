@@ -1,5 +1,6 @@
 <?php
 use EcomDev_LayoutCompiler_Contract_CompilerInterface as CompilerInterface;
+use EcomDev_LayoutCompiler_Exporter_Expression as Expression;
 
 /**
  * Parser for <block /> nodes in the layout
@@ -68,7 +69,18 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Block
         }
 
         $statements = $compiler->parseElements($element, $arguments[1], $parentIdentifiers);
-        array_unshift($statements, $this->getClassStatement($arguments));
-        return $statements;
+        $blockStatements = array(
+            new Expression(sprintf('$this->addItem($item = %s, false)', $this->getClassStatement($arguments)))
+        );
+
+        foreach (array_unique(
+                     array_merge(array($arguments[1], $arguments[2]), $parentIdentifiers)
+                 ) as $parentBlock) {
+            $blockStatements[] = new Expression(
+                sprintf('$this->addItemRelation($item, %s)', var_export($parentBlock, true))
+            );
+        }
+
+        return array_merge($blockStatements, $statements);
     }
 }

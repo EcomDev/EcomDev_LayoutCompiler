@@ -71,9 +71,23 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Action
             implode(', ', $exportedArgs)
         );
 
-        return $this->getClassStatement(array(
-            $attributes, $blockIdentifier, new Expression($callExpression), $parentIdentifiers
-        ));
+        $statements = array();
+        $statements[] = new Expression(
+            sprintf(
+                '$this->addItem($item = %s, false)',
+                $this->getClassStatement(array(
+                    $attributes, $blockIdentifier, new Expression($callExpression), $parentIdentifiers
+                ))
+            )
+        );
+
+        foreach (array_unique(array_merge(array($blockIdentifier), $parentIdentifiers)) as $parentBlock) {
+            $statements[] = new Expression(
+                sprintf('$this->addItemRelation($item, %s)', var_export($parentBlock, true))
+            );
+        }
+
+        return $statements;
     }
 
     /**

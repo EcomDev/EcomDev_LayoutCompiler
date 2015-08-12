@@ -4,6 +4,7 @@ use EcomDev_LayoutCompiler_Contract_Layout_SourceInterface as SourceInterface;
 use EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface as MetadataInterface;
 use EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface as MetadataFactoryInterface;
 use EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface as ParserInterface;
+use EcomDev_LayoutCompiler_Contract_Exporter_ExpressionInterface as ExpressionInterface;
 
 class EcomDev_LayoutCompiler_Compiler
     implements EcomDev_LayoutCompiler_Contract_CompilerInterface
@@ -145,6 +146,10 @@ class EcomDev_LayoutCompiler_Compiler
                 file_put_contents(
                     $fileToSave, sprintf("<?php %s",  implode("\n",
                         array_map(function ($item) {
+                            if ($item instanceof ExpressionInterface) {
+                                return sprintf('%s;', (string)$item);
+                            }
+
                             return sprintf('$this->addItem(%s);', $item);
                         }, $result[$handle]))
                     )

@@ -55,7 +55,72 @@ class EcomDev_LayoutCompiler_Layout_ProcessorTest
         
         $this->assertSame(array($item1, $item2), $this->processor->findItemsByBlockId('block_three'));
     }
-    
+
+    public function testItAddsBlockAwareItemListButIgnoresItsRelationsIfFlagIsSet()
+    {
+        $item1 = $this->createBlockAwareLayoutItem(array('block_one', array('block_two', 'block_three')));
+        $item2 = $this->createBlockAwareLayoutItem(array('block_two', array('block_three')));
+
+        $this->assertSame($this->processor, $this->processor->addItem($item1, false));
+        $this->assertSame($this->processor, $this->processor->addItem($item2, false));
+        $this->assertSame(
+            array($item1, $item2),
+            $this->processor->findItemsByType(ItemInterface::TYPE_LOAD)
+        );
+
+        $this->assertEmpty($this->processor->findItemsByBlockIdAndType(
+            'block_two', ItemInterface::TYPE_LOAD
+        ));
+
+        $this->assertEmpty($this->processor->findItemsByBlockIdAndType(
+            'block_one', ItemInterface::TYPE_LOAD
+        ));
+
+        $this->assertEmpty($this->processor->findItemsByBlockIdAndType(
+            'block_one', ItemInterface::TYPE_POST_INITIALIZE
+        ));
+
+        $this->assertEmpty(
+            $this->processor->findItemsByBlockId('block_three')
+        );
+    }
+
+    public function testItAddsItemRelationIfNeeded()
+    {
+        $item = $this->createLayoutItem(ItemInterface::TYPE_POST_INITIALIZE, 3);
+        $this->processor->addItem($item);
+        $this->processor->addItemRelation($item, 'block_one');
+        $this->processor->addItemRelation($item, 'block_three');
+
+        $this->assertSame(
+            array($item),
+            $this->processor->findItemsByType(ItemInterface::TYPE_POST_INITIALIZE)
+        );
+
+        $this->assertSame(
+            array($item),
+            $this->processor->findItemsByBlockIdAndType(
+                'block_one',
+                ItemInterface::TYPE_POST_INITIALIZE
+            )
+        );
+
+        $this->assertSame(
+            array($item),
+            $this->processor->findItemsByBlockIdAndType(
+                'block_three',
+                ItemInterface::TYPE_POST_INITIALIZE
+            )
+        );
+
+        $this->assertEmpty(
+            $this->processor->findItemsByBlockIdAndType(
+                'block_five',
+                ItemInterface::TYPE_POST_INITIALIZE
+            )
+        );
+    }
+
     public function testItRemovesItemFromAllAddedPlaces()
     {
         $itemToRemove = $this->createBlockAwareLayoutItem(array('block_one', array('block_two')));

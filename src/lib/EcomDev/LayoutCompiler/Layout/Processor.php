@@ -40,9 +40,10 @@ class EcomDev_LayoutCompiler_Layout_Processor
      * Adds an item to layout
      *
      * @param ItemInterface $item
+     * @param bool $discoverRelations
      * @return $this
      */
-    public function addItem(ItemInterface $item)
+    public function addItem(ItemInterface $item, $discoverRelations = true)
     {
         $itemType = $item->getType();
         
@@ -55,27 +56,35 @@ class EcomDev_LayoutCompiler_Layout_Processor
         $itemId = $this->getItemId($item);
         $this->items[$itemId] = $item;
         $this->itemByType[$itemType][$itemId] = $item;
-        if ($item instanceof EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface) {
+        if ($discoverRelations && $item instanceof EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface) {
             $blockIdentifiers = $item->getPossibleBlockIdentifiers();
-            $itemInfo = array($itemId => $item);
 
             foreach ($blockIdentifiers as $blockId) {
-                if (!isset($this->itemByBlock[$blockId])) {
-                    $this->itemByBlock[$blockId] = $itemInfo;
-                } else {
-                    $this->itemByBlock[$blockId] += $itemInfo;
-                }
-
-                if (!isset($this->itemByBlockAndType[$itemType][$blockId])) {
-                    $this->itemByBlockAndType[$itemType][$blockId] = $itemInfo;
-                } else {
-                    $this->itemByBlockAndType[$itemType][$blockId] += $itemInfo;
-                }
+                $this->addItemRelation($item, $blockId);
             }
         }
-        
+
         return $this;
     }
+
+    /**
+     * Adds an item of block to another block
+     *
+     * @param EcomDev_LayoutCompiler_Contract_Layout_ItemInterface $item
+     * @param string $blockIdentifier
+     * @return $this
+     */
+    public function addItemRelation(ItemInterface $item, $blockIdentifier)
+    {
+        $itemType = $item->getType();
+        $itemId = $this->getItemId($item);
+
+        $this->itemByBlock[$blockIdentifier][$itemId] = $item;
+        $this->itemByBlockAndType[$itemType][$blockIdentifier][$itemId] = $item;
+
+        return $this;
+    }
+
 
     /**
      * Returns identifier of the item
@@ -99,7 +108,7 @@ class EcomDev_LayoutCompiler_Layout_Processor
         $itemType = $item->getType();
         
         unset($this->itemByType[$itemType][$itemId]);
-        unset($this->items[$itemId]);
+        unset($this->items[$itemId]);;
         
         if ($item instanceof EcomDev_LayoutCompiler_Contract_Layout_BlockAwareInterface) {
             foreach ($item->getPossibleBlockIdentifiers() as $block) {
@@ -176,6 +185,12 @@ class EcomDev_LayoutCompiler_Layout_Processor
         }
         
         return $this;
+    }
+
+
+    public function getItemByBlock()
+    {
+        return $this->itemByBlock;
     }
 
     /**

@@ -82,7 +82,7 @@ class EcomDev_LayoutCompiler_CompilerTest
         $this->assertSame($compiler, $compiler->setSavePath('path/to/save'));
     }
 
-    public function testItCompilesASource()
+    public function testItCompilesAStringSource()
     {
         $parser = $this->createParser('new Node()');
         
@@ -123,6 +123,52 @@ class EcomDev_LayoutCompiler_CompilerTest
             "<?php \$this->addItem(new Node());\n\$this->addItem(new Node());"
         );
         
+        $this->assertFileNotExists($handleFilePaths['item3']);
+    }
+
+    public function testItAllowsToCompilesAnExpressionSource()
+    {
+        $parser = $this->createParser(
+            new EcomDev_LayoutCompiler_Exporter_Expression('$this->newValue(new Node())')
+        );
+
+        $source = $this->createSource(array(
+            'item1' => array('node' => array_fill(0, 4, array())), // 4 node items
+            'item2' => array('node' => array_fill(0, 2, array())), // 2 node items
+            'item3' => array('node2' => array())
+        ));
+
+        $handleFilePaths = array(
+            'item1' => Stream::url($this->fileSystem->path() . '/compiled/item_id_item1.php'),
+            'item2' => Stream::url($this->fileSystem->path() . '/compiled/item_id_item2.php'),
+            'item3' => Stream::url($this->fileSystem->path() . '/compiled/item_id_item3.php')
+        );
+
+        $metadata = $this->createMetadata(
+            array_diff_key($handleFilePaths, array('item3' => null))
+        );
+
+        $this->metadataFactory->expects($this->once())
+            ->method('createFromSource')
+            ->with($this->identicalTo($source), array('item1', 'item2'))
+            ->willReturn($metadata);
+
+        $compiler = new Compiler(
+            $this->getCompilerOptions() + array('parsers' => array('node' => $parser))
+        );
+
+        $this->assertSame($metadata, $compiler->compile($source));
+
+        $this->assertStringEqualsFile(
+            $handleFilePaths['item1'],
+            "<?php \$this->newValue(new Node());\n\$this->newValue(new Node());\n\$this->newValue(new Node());\n\$this->newValue(new Node());"
+        );
+
+        $this->assertStringEqualsFile(
+            $handleFilePaths['item2'],
+            "<?php \$this->newValue(new Node());\n\$this->newValue(new Node());"
+        );
+
         $this->assertFileNotExists($handleFilePaths['item3']);
     }
 

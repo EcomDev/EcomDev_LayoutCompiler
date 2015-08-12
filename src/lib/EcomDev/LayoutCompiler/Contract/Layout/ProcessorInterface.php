@@ -13,9 +13,19 @@ interface EcomDev_LayoutCompiler_Contract_Layout_ProcessorInterface
      * Adds an item to layout
      * 
      * @param ItemInterface $item
+     * @param bool $discoverRelations
      * @return $this
      */
-    public function addItem(ItemInterface $item);
+    public function addItem(ItemInterface $item, $discoverRelations = true);
+
+    /**
+     * Adds an item of block to another block
+     *
+     * @param EcomDev_LayoutCompiler_Contract_Layout_ItemInterface $item
+     * @param string $blockIdentifier
+     * @return $this
+     */
+    public function addItemRelation(ItemInterface $item, $blockIdentifier);
 
     /**
      * Removes an item from a layout

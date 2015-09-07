@@ -36,5 +36,5 @@ script:
   - bin/phpunit -c phpunit.xml --colors --coverage-php=build/var/phpunit/cov/01-unit.cov
   - bin/mage-ci phpunit $MAGE_DIR --colors --coverage-php=var/phpunit/cov/02-$MAGE_DIR.cov
 after_script:
-  - bin/phpcov merge --clover build/var/phpunit/coverage-test.xml -- build/var/phpunit/cov
+  - bin/phpcov merge --clover build/var/phpunit/coverage-merged.xml -- build/var/phpunit/cov
   - bin/coveralls -v

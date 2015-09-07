@@ -155,6 +155,37 @@ class EcomDev_LayoutCompiler_Layout_Source_FileTest
     }
 
     /**
+     * @sourceFile existing/layout_file.xml
+     */
+    public function testItWorksWithMultipleSameHandleNamesInOneFile()
+    {
+        $expectedElements = array(
+            'handle_name_one' => '<handle_name_one><block_one /><block_one /><block_three item="1"/><block_five item="3"/></handle_name_one>',
+            'handle_name_two' => '<handle_name_two><block_two /><block_two /></handle_name_two>',
+        );
+
+        $this->prepareLayoutFile(sprintf(
+            '<layout>%s%s%s%s</layout>',
+            '<handle_name_one><block_one /><block_one /></handle_name_one>',
+            $expectedElements['handle_name_two'],
+            '<handle_name_one><block_three item="1"/></handle_name_one>',
+            '<handle_name_one><block_five item="3"/></handle_name_one>'
+        ));
+
+        $actualElements = $this->source->load();
+
+        $this->assertSame(array_keys($expectedElements), array_keys($actualElements));
+
+        foreach ($expectedElements as $key => $element) {
+            $this->assertInstanceOf('SimpleXmlElement', $actualElements[$key]);
+            $this->assertXmlStringEqualsXmlString(
+                (new SimpleXMLElement($element))->asXML(),
+                $actualElements[$key]->asXML()
+            );
+        }
+    }
+
+    /**
      * Prepares a non readable file
      * 
      * @return $this

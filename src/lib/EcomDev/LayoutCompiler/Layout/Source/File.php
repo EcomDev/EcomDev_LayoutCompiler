@@ -83,9 +83,22 @@ class EcomDev_LayoutCompiler_Layout_Source_File
             ));
         }
         
-        $result = array();
+        $stringXml = array();
+
+        // First convert all elements to string,
+        // as in xml file can be multiple string with the same handle names
         foreach ($simpleXmlElement->children() as $key => $element) {
-            $result[$key] = $element;
+            if (!isset($stringXml[$key])) {
+                $stringXml[$key] = '';
+            }
+            foreach ($element->children() as $child) {
+                $stringXml[$key] .= $child->asXml();
+            }
+        }
+
+        $result = array();
+        foreach ($stringXml as $key => $xml) {
+            $result[$key] = simplexml_load_string(sprintf('<%1$s>%2$s</%1$s>', $key, $xml));
         }
         
         return $result;

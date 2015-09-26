@@ -1,4 +1,9 @@
 <config>
+    <modules>
+        <EcomDev_LayoutCompiler>
+            <codeVersion>1.0.0-beta</codeVersion>
+        </EcomDev_LayoutCompiler>
+    </modules>
     <global>
         <models>
             <ecomdev_layoutcompiler>

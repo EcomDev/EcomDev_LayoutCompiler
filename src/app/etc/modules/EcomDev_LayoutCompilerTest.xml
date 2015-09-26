@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <EcomDev_LayoutCompilerTest>
+            <codePool>community</codePool>
+            <active>false</active> <!-- tests are disabled by default, see .travis.yml for command to activate it -->
+        </EcomDev_LayoutCompilerTest>
+    </modules>
+</config>

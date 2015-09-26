@@ -1,0 +1,59 @@
+tables:
+  core/layout_update:
+    - layout_update_id: 1 # Checksum 911b2c6d1d3d758a0add854c9e9780bb
+      handle: test_handle_one
+      xml: --|
+        <some><value>1</value></some>
+      sort_order: 2
+    - layout_update_id: 2 # Checksum 871f6adcb48e7b6129361b93883a9007
+      handle: test_handle_two
+      xml: --|
+        <some><value>2</value></some>
+      sort_order: 1
+    - layout_update_id: 3 # Checksum dc10dc3ca6e27d1d0e9fa5a7ed02a43e
+      handle: test_handle_three
+      xml: --|
+        <some><value>3</value></some>
+      sort_order: 4
+    - layout_update_id: 4 # Checksum 0ea6a5bbb8f76e88f9c538ca5dd3ace7
+      handle: test_handle_three
+      xml: --|
+        <some><value>4</value></some>
+      sort_order: 3
+  core/layout_link: # Order for different cases: 1/default/default - 2,1 2/default/default - 1, 1/default/blue - 2,4,3
+    - layout_link_id: 10
+      store_id: 0
+      area: frontend
+      package: base
+      theme: default
+      layout_update_id: 1
+    - layout_link_id: 12
+      store_id: 0
+      area: frontend
+      package: default
+      theme: default
+      layout_update_id: 1
+    - layout_link_id: 210
+      store_id: 1
+      area: frontend
+      package: default
+      theme: default
+      layout_update_id: 2
+    - layout_link_id: 211
+      store_id: 1
+      area: frontend
+      package: default
+      theme: blue
+      layout_update_id: 2
+    - layout_link_id: 31
+      store_id: 1
+      area: frontend
+      package: default
+      theme: blue
+      layout_update_id: 3
+    - layout_link_id: 41
+      store_id: 0
+      area: frontend
+      package: default
+      theme: blue
+      layout_update_id: 4

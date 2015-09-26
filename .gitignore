@@ -118,3 +118,10 @@ skin/frontend/default/modern/
 skin/frontend/enterprise
 skin/install/
 var/
+
+.DS_Store
+.idea/
+.vagrant/
+bin/
+build/
+vendor/

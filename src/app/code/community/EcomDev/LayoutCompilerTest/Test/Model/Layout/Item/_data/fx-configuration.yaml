@@ -1,0 +1,2 @@
+config:
+  default/some/defined/flag: "true"

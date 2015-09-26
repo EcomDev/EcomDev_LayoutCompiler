@@ -1,0 +1,22 @@
+<config>
+    <sections>
+        <dev>
+            <groups>
+                <template>
+                    <fields>
+                        <ecomdev_layoutcompiler module="ecomdev_layoutcompiler" translate="label">
+                            <label>[EcomDev_LayoutCompiler] Compile Layout Files</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment>This tool is in beta. Disable if you experience issues with compiled layout files</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <sort_order>100</sort_order>
+                        </ecomdev_layoutcompiler>
+                    </fields>
+                </template>
+            </groups>
+        </dev>
+    </sections>
+</config>

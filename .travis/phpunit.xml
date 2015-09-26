@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- initial phpunit configuration file, that you can modify for your project needs -->
+<phpunit cacheTokens="true"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         verbose="false"
+         bootstrap="app/code/community/EcomDev/PHPUnit/bootstrap.php">
+   <listeners>
+       <listener file="app/code/community/EcomDev/PHPUnit/Test/Listener.php" class="EcomDev_PHPUnit_Test_Listener" />
+   </listeners>
+   <testsuite name="Magento Test Suite">
+        <file>app/code/community/EcomDev/PHPUnit/Test/Suite.php</file>
+   </testsuite>
+   <filter>
+       <whitelist>
+           <directory suffix=".php">app/code/community/EcomDev/LayoutCompiler</directory>
+           <directory suffix=".php">lib/EcomDev/LayoutCompiler</directory>
+       </whitelist>
+   </filter>
+</phpunit>
+

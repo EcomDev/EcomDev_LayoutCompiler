@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<phpunit cacheTokens="true"
+         colors="true"
+         bootstrap="tests/bootstrap.php">
+    <testsuite name="UnitTests">
+        <directory suffix=".php">tests/lib</directory>
+    </testsuite>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/lib</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <ini name="error_reporting" value="32767" />
+        <ini name="display_errors" value="1" />
+        <ini name="date.timezone" value="UTC" />
+    </php>
+</phpunit>
+

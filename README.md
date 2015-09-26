@@ -12,25 +12,4 @@ Transforms recursive layout xml files into simple simple one level php code, tha
 
 ## Installation
 
-The only supported way of installing an extension, is using it as a composer dependency.
-
-1. Add extension and firegento repositories in composer  
-
-         "repositories": [
-            {
-              "type": "composer",
-              "url": "http://packages.firegento.com"
-            },
-            {
-              "type": "vcs",
-              "url": "git@github.com:EcomDev/EcomDev_LayoutCompiler.git"
-            }
-        ]
-
-2. Add extension as a requirement (currently in develop stability)
-
-        "require": {
-            "ecomdev/layout-compiler": "dev-develop"
-        }
-
-3. Run `composer install`
+[See Installation Document](docs/INSTALLATION.md)

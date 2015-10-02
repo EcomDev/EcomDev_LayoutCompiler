@@ -47,6 +47,9 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Action
 
         $methodArgs = array();
         
+        $args = (array)$element->children();
+        unset($args['@attributes']);
+        
         foreach ($args as $argKey => $argument) {
             if ($argument instanceof SimpleXMLElement) {
                 $methodArgs[$argKey] = $this->parseArgument($argument);

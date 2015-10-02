@@ -46,8 +46,13 @@ class EcomDev_LayoutCompiler_Model_Compiler_Parser_Action
         }
 
         $methodArgs = array();
-        foreach ($element->children() as $argKey => $argument) {
-            $methodArgs[$argKey] = $this->parseArgument($argument);
+        
+        foreach ($args as $argKey => $argument) {
+            if ($argument instanceof SimpleXMLElement) {
+                $methodArgs[$argKey] = $this->parseArgument($argument);
+            } else {
+                $methodArgs[$argKey] = $argument;
+            }
         }
 
         if (isset($attributes['json'])) {

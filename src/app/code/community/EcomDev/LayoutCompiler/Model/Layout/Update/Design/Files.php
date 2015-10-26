@@ -82,7 +82,10 @@ class EcomDev_LayoutCompiler_Model_Layout_Update_Design_Files
     public function setDesignConfig($config = null)
     {
         if ($config === null) {
-            $config = Mage::getSingleton('core/design_config');
+            // Remove exception on standart autoloader of Magento in versions before 1.9.x
+            if (@class_exists('Mage_Core_Model_Design_Config')) {
+                $config = Mage::getSingleton('core/design_config');
+            }
         }
 
         $this->designConfig = $config;

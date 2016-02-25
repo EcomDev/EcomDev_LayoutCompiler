@@ -14,8 +14,10 @@ before_script:
   - MAGE_DIR=build
   # Install mage-ci
   - source <(curl -s https://raw.githubusercontent.com/EcomDev/MageCI/master/installer)
+  - wget https://files.magerun.net/n98-magerun.phar
+  - mv ./n98-magerun.phar bin/magerun && chmod +x bin/magerun
   # Installing magento version with prepared DB dump
-  - bin/mage-ci install $MAGE_DIR $MAGE magento -c
+  - bin/magerun install --dbHost="localhost" --dbUser="root" --dbPass="" --dbName="magento" --installSampleData=no --useDefaultConfigParams=yes --magentoVersionByName="magento-ce-$MAGE" --installationFolder="$MAGE_DIR" --baseUrl="http://magento.dev/"
   # Copy composer.json for a build (without magento dependency)
   - cp .travis/composer.json ./composer.json
   # Update composer

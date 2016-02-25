@@ -1,7 +1,7 @@
 <config>
     <modules>
         <EcomDev_LayoutCompiler>
-            <codeVersion>1.0.0</codeVersion>
+            <codeVersion>1.0.1</codeVersion>
         </EcomDev_LayoutCompiler>
     </modules>
     <global>

@@ -5,7 +5,8 @@
   "description": "Layout Compiler For Magento",
   "require": {
     "php": ">=5.4.0",
-    "magento-hackathon/magento-composer-installer": "*"
+    "magento-hackathon/magento-composer-installer": "*",
+    "symfony/filesystem": ">2.3"
   },
   "require-dev": {
     "magento/core": "1.9.1.0",

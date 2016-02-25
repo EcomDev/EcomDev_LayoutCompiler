@@ -5,6 +5,7 @@ use EcomDev_LayoutCompiler_Contract_Compiler_MetadataInterface as MetadataInterf
 use EcomDev_LayoutCompiler_Contract_Compiler_MetadataFactoryInterface as MetadataFactoryInterface;
 use EcomDev_LayoutCompiler_Contract_Compiler_ParserInterface as ParserInterface;
 use EcomDev_LayoutCompiler_Contract_Exporter_ExpressionInterface as ExpressionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class EcomDev_LayoutCompiler_Compiler
     implements EcomDev_LayoutCompiler_Contract_CompilerInterface
@@ -26,7 +27,14 @@ class EcomDev_LayoutCompiler_Compiler
      * @var ParserInterface[]
      */
     protected $parsers;
-    
+
+    /**
+     * File system instance
+     *
+     * @var Filesystem
+     */
+    private $fileSystem;
+
     /**
      * Constructs a new compiler instance
      * 
@@ -59,6 +67,8 @@ class EcomDev_LayoutCompiler_Compiler
                 $this->setParser($key, $value);
             }
         }
+
+        $this->fileSystem = new Filesystem();
     }
 
     /**
@@ -122,7 +132,7 @@ class EcomDev_LayoutCompiler_Compiler
             }
             
             foreach ($metadata->getHandles() as $handleName) {
-                @unlink($metadata->getHandlePath($handleName));
+                $this->fileSystem->remove($metadata->getHandlePath($handleName));
             }
         }
         
@@ -140,19 +150,37 @@ class EcomDev_LayoutCompiler_Compiler
         foreach ($metadata->getHandles() as $handle) {
             if (isset($result[$handle])) {
                 $fileToSave = $metadata->getHandlePath($handle);
-                if (!is_dir(dirname($fileToSave))) {
-                    mkdir(dirname($fileToSave), 0755, true);
+                $path = dirname($fileToSave);
+                if (!$this->fileSystem->exists($path)) {
+                    $this->fileSystem->mkdir($path, 0755);
                 }
-                file_put_contents(
-                    $fileToSave, sprintf("<?php %s",  implode("\n",
+
+                $tmpFile = $path . DIRECTORY_SEPARATOR . uniqid('tempfile');
+                $content = sprintf(
+                    "<?php %s",
+                    implode(
+                        "\n",
                         array_map(function ($item) {
                             if ($item instanceof ExpressionInterface) {
                                 return sprintf('%s;', (string)$item);
                             }
 
                             return sprintf('$this->addItem(%s);', $item);
-                        }, $result[$handle]))
+                        }, $result[$handle])
                     )
+                );
+
+                file_put_contents($tmpFile, $content);
+
+                $this->fileSystem->rename(
+                    $tmpFile,
+                    $fileToSave,
+                    true
+                );
+
+                $this->fileSystem->chmod(
+                    $fileToSave,
+                    0644
                 );
             }
             

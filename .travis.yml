@@ -17,7 +17,7 @@ before_script:
   - wget https://files.magerun.net/n98-magerun.phar
   - mv ./n98-magerun.phar bin/magerun && chmod +x bin/magerun
   # Installing magento version with prepared DB dump
-  - bin/magerun install --dbHost="localhost" --dbUser="root" --dbPass="" --dbName="magento" --installSampleData=no --useDefaultConfigParams=yes --magentoVersionByName="magento-ce-$MAGE" --installationFolder="$MAGE_DIR" --baseUrl="http://magento.dev/"
+  - bin/magerun install --dbHost="localhost" --dbUser="root" --dbPass="" --dbName="magento" --installSampleData=no --useDefaultConfigParams=yes --magentoVersionByName="magento-mirror-$MAGE" --installationFolder="$MAGE_DIR" --baseUrl="http://magento.dev/"
   # Copy composer.json for a build (without magento dependency)
   - cp .travis/composer.json ./composer.json
   # Update composer

@@ -37,7 +37,7 @@ class EcomDev_LayoutCompiler_ExporterTest extends PHPUnit_Framework_TestCase
             array("'string\\''", 'string\''),
             array("'\"string\"'", '"string"'),
             array("'string' . \"\\0\" . 'another'", "string\0another"),
-            array("0", 0.00),
+            array((PHP_VERSION_ID > 70000 ? "0.0" : "0"), 0.00), // Issue with PHP 7.0 var export implementation :)
             array("1", 1),
             array('null', null),
             array('false', false),

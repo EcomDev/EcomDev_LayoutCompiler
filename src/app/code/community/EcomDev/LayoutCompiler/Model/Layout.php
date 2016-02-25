@@ -205,6 +205,22 @@ class EcomDev_LayoutCompiler_Model_Layout
     }
 
     /**
+     * Fix issue with PHP7.0
+     *
+     * @return string
+     */
+    public function getOutput()
+    {
+        $out = '';
+        if (!empty($this->_output)) {
+            foreach ($this->_output as $callback) {
+                $out .= $this->getBlock($callback[0])->{$callback[1]}();
+            }
+        }
+        return $out;
+    }
+
+    /**
      * Does post initialization process for Magento layout, like it is done for Magento.
      *
      * @return $this

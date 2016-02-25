@@ -1,20 +1,28 @@
 language: php
 php:
-  - 5.4
   - 5.5
   - 5.6
+  - 7.0
 env:
   - MAGE=1.9.1.0
   - MAGE=1.9.1.1
   - MAGE=1.9.0.0
   - MAGE=1.8.1.0
   - MAGE=1.7.0.2
+cache:
+  directories:
+    - $HOME/.composer
+
 before_script:
   - MAGE_DIR=build
   # Install mage-ci
   - source <(curl -s https://raw.githubusercontent.com/EcomDev/MageCI/master/installer)
+  - wget https://files.magerun.net/n98-magerun.phar
+  - mv ./n98-magerun.phar bin/magerun && chmod +x bin/magerun
+  # Remove composer lock as it gives issues with coveralls
+  - rm composer.lock
   # Installing magento version with prepared DB dump
-  - bin/mage-ci install $MAGE_DIR $MAGE magento -c
+  - bin/magerun install --dbHost="localhost" --dbUser="root" --dbPass="" --dbName="magento" --installSampleData=no --useDefaultConfigParams=yes --magentoVersionByName="magento-mirror-$MAGE" --installationFolder="$MAGE_DIR" --baseUrl="http://magento.dev/"
   # Copy composer.json for a build (without magento dependency)
   - cp .travis/composer.json ./composer.json
   # Update composer

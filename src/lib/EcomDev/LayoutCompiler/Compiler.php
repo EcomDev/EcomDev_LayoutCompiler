@@ -29,13 +29,6 @@ class EcomDev_LayoutCompiler_Compiler
     protected $parsers;
 
     /**
-     * File system instance
-     *
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
      * Constructs a new compiler instance
      * 
      * @param array $options
@@ -67,8 +60,6 @@ class EcomDev_LayoutCompiler_Compiler
                 $this->setParser($key, $value);
             }
         }
-
-        $this->fileSystem = new Filesystem();
     }
 
     /**
@@ -132,7 +123,7 @@ class EcomDev_LayoutCompiler_Compiler
             }
             
             foreach ($metadata->getHandles() as $handleName) {
-                $this->fileSystem->remove($metadata->getHandlePath($handleName));
+                @unlink($metadata->getHandlePath($handleName));
             }
         }
         
@@ -151,8 +142,8 @@ class EcomDev_LayoutCompiler_Compiler
             if (isset($result[$handle])) {
                 $fileToSave = $metadata->getHandlePath($handle);
                 $path = dirname($fileToSave);
-                if (!$this->fileSystem->exists($path)) {
-                    $this->fileSystem->mkdir($path, 0755);
+                if (!is_dir($path)) {
+                    mkdir($path, 0755, true);
                 }
 
                 $tmpFile = $path . DIRECTORY_SEPARATOR . uniqid('tempfile');
@@ -172,16 +163,8 @@ class EcomDev_LayoutCompiler_Compiler
 
                 file_put_contents($tmpFile, $content);
 
-                $this->fileSystem->rename(
-                    $tmpFile,
-                    $fileToSave,
-                    true
-                );
-
-                $this->fileSystem->chmod(
-                    $fileToSave,
-                    0644
-                );
+                rename($tmpFile, $fileToSave);
+                chmod($fileToSave, 0644);
             }
             
         }

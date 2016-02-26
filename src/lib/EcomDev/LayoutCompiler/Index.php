@@ -38,22 +38,6 @@ class EcomDev_LayoutCompiler_Index
     private $hexTable;
 
     /**
-     * File system instance
-     *
-     * @var Filesystem
-     */
-    private $fileSystem;
-
-    /**
-     * Initializes file system instance
-     *
-     */
-    public function __construct()
-    {
-        $this->fileSystem = new Filesystem();
-    }
-
-    /**
      * Loads an index by metadata parameters
      *
      * If no index file is found it returns false
@@ -214,25 +198,15 @@ class EcomDev_LayoutCompiler_Index
             $lines[] = sprintf('$this->addMetadata(%s);', var_export($metadata, true));
         }
         
-        if (!$this->fileSystem->exists($this->getSavePath())) {
-            $this->fileSystem->mkdir($this->getSavePath(), 0755);
+        if (!is_dir($this->getSavePath())) {
+            mkdir($this->getSavePath(), 0755, true);
         }
 
         $tmpFile = $this->getSavePath() . DIRECTORY_SEPARATOR . uniqid('tempfile');
         $filePath = $this->getIndexFileName($parameters);
         file_put_contents($tmpFile, "<?php \n" . implode("\n", $lines));
-
-        $this->fileSystem->rename(
-            $tmpFile,
-            $filePath,
-            true
-        );
-
-        $this->fileSystem->chmod(
-            $filePath,
-            0644
-        );
-
+        rename($tmpFile, $filePath);
+        chmod($filePath, 0644);
         return $this;
     }
 }

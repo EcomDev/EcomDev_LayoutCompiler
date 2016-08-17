@@ -202,7 +202,7 @@ class EcomDev_LayoutCompiler_Index
             mkdir($this->getSavePath(), 0755, true);
         }
 
-        $tmpFile = $this->getSavePath() . DIRECTORY_SEPARATOR . uniqid('tempfile');
+        $tmpFile = $this->getSavePath() . DIRECTORY_SEPARATOR . uniqid('tempfile', TRUE);
         $filePath = $this->getIndexFileName($parameters);
         file_put_contents($tmpFile, "<?php \n" . implode("\n", $lines));
         rename($tmpFile, $filePath);

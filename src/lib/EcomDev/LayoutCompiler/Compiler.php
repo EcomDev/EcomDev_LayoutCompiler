@@ -146,7 +146,7 @@ class EcomDev_LayoutCompiler_Compiler
                     mkdir($path, 0755, true);
                 }
 
-                $tmpFile = $path . DIRECTORY_SEPARATOR . uniqid('tempfile');
+                $tmpFile = $path . DIRECTORY_SEPARATOR . uniqid('tempfile', TRUE);
                 $content = sprintf(
                     "<?php %s",
                     implode(

@@ -10,7 +10,7 @@ class EcomDev_LayoutCompiler_Model_Layout_Update
     extends Mage_Core_Model_Layout_Update
     implements UpdateInterface, FactoryAwareInterface, CacheAwareInterface
 {
-    const CACHE_KEY_VALIDATION = 'LAYOUT_VALIDITY_%s_%s_%s_%s';
+    const CACHE_KEY_VALIDATION = 'LAYOUT_VALIDITY_%s_%s_%s_%s_%s';
 
     use EcomDev_LayoutCompiler_LayoutAwareTrait;
     use EcomDev_LayoutCompiler_FactoryAwareTrait;
@@ -188,6 +188,7 @@ class EcomDev_LayoutCompiler_Model_Layout_Update
         $parameters = $this->getDesignParameters();
         return sprintf(
             self::CACHE_KEY_VALIDATION,
+            gethostname(),
             $parameters['area'],
             $parameters['package'],
             $parameters['theme'],

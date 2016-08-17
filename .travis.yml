@@ -17,7 +17,7 @@ before_script:
   - MAGE_DIR=build
   # Install mage-ci
   - source <(curl -s https://raw.githubusercontent.com/EcomDev/MageCI/master/installer)
-  - wget https://files.magerun.net/n98-magerun.phar
+  - wget https://files.magerun.net/n98-magerun.phar --no-check-certificate
   - mv ./n98-magerun.phar bin/magerun && chmod +x bin/magerun
   # Remove composer lock as it gives issues with coveralls
   - rm composer.lock

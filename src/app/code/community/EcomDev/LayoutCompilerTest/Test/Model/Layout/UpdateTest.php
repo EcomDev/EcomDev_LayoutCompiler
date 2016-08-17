@@ -248,7 +248,7 @@ class EcomDev_LayoutCompilerTest_Test_Model_Layout_UpdateTest
         $cache = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CacheInterface');
         $cache->expects($this->once())
             ->method('load')
-            ->with('LAYOUT_VALIDITY_frontend_default_default123_1')
+            ->with('LAYOUT_VALIDITY_'.gethostname().'_frontend_default_default123_1')
             ->willReturn(true);
 
         $this->update->setCache($cache);
@@ -295,12 +295,12 @@ class EcomDev_LayoutCompilerTest_Test_Model_Layout_UpdateTest
         $cache = $this->getMockForAbstractClass('EcomDev_LayoutCompiler_Contract_CacheInterface');
         $cache->expects($this->once())
             ->method('load')
-            ->with('LAYOUT_VALIDITY_frontend_default_default123_1')
+            ->with('LAYOUT_VALIDITY_'.gethostname().'_frontend_default_default123_1')
             ->willReturn(false);
 
         $cache->expects($this->once())
             ->method('save')
-            ->with('LAYOUT_VALIDITY_frontend_default_default123_1', true, 3600)
+            ->with('LAYOUT_VALIDITY_'.gethostname().'_frontend_default_default123_1', true, 3600)
             ->willReturnSelf();
 
         $this->update->setCache($cache);
